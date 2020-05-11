@@ -2,8 +2,6 @@
   <div id="app">
     <v-app>
       <Navbar></Navbar>
-
-
       <v-content>
         <v-container fluid>
           <router-view></router-view>

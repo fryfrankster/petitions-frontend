@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Petitions from "../views/Petitions";
+import Petition from "../views/Petition";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ Vue.use(VueRouter);
     path: '/petitions',
     name: 'Petitions',
     component: Petitions
+  },
+  {
+    path: '/petitions/:id',
+    name: 'Petition',
+    component: Petition
   },
   {
     path: '/about',
