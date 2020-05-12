@@ -3,7 +3,7 @@ import axios from 'axios';
 // import VueAxios from 'vue-axios';
 // Vue.use(VueAxios, axios);
 
-const SERVER_URL = 'http://csse-s365.canterbury.ac.nz:4001/api/v1/';
+export const SERVER_URL = 'http://csse-s365.canterbury.ac.nz:4001/api/v1/';
 
 let instance = axios.create({
     baseURL: SERVER_URL,
@@ -15,11 +15,20 @@ export const apiPetition = {
     getAllPetitions: () => instance.get('/petitions'),
 
     getOnePetition: (petitionId) => instance.get('/petitions/' + petitionId),
+
 };
 
 export const apiUser = {
     login: (email, password) => instance.post('/users/login', {
         email: email,
         password: password
+    }),
+
+    register: (name, email, password, city, country) => instance.post('users/register', {
+        name: name,
+        email: email,
+        password: password,
+        city: city,
+        country: country
     }),
 };

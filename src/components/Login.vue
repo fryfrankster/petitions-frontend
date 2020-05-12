@@ -1,8 +1,7 @@
 <template>
     <div class="login">
-        <v-container class="login-grid">
+        <v-container class="login-container">
             <v-layout>
-
                 <v-flex>
                     <v-card flat max-width="500">
                         <form>
@@ -69,6 +68,7 @@
         methods: {
             submit() {
                 this.$v.$touch()
+
             },
             clear() {
                 this.$v.$reset();

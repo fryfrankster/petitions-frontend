@@ -1,15 +1,22 @@
 <template>
     <div class="single-petition">
-        <v-card>
-            <v-card-title>{{ petition.title }}</v-card-title>
-            <v-avatar color="grey">{{ petition.author }}</v-avatar>
-            <v-card-text>{{ petition.description }}</v-card-text>
-        </v-card>
+        <v-container>
+            <v-card>
+                <v-card-title>{{ petition.title }}</v-card-title>
+                <v-card-text>{{ petition.description }}</v-card-text>
+                <v-img
+                        v-bind:src="petitionPhoto"
+                >
+                </v-img>
+            </v-card>
+        </v-container>
     </div>
 </template>
 
 <script>
     import {apiPetition} from "../api";
+
+    const rootUrl = "http://csse-s365.canterbury.ac.nz:4001/api/v1/";
 
     export default {
         name: "Petition",
@@ -23,6 +30,11 @@
         mounted: function () {
             this.getPetition();
         },
+        computed: {
+            petitionPhoto: function () {
+                return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
+            }
+        },
         methods: {
             getPetition() {
                 apiPetition.getOnePetition(this.$route.params.id)
@@ -33,7 +45,7 @@
                         this.error = error;
                         this.errorFlag = true;
                     });
-            }
+            },
         }
     }
 </script>
