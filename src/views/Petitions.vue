@@ -5,7 +5,6 @@
                 <v-row>
                     <v-col cols="12" sm="6" md="3" app>
                         <div class="sortByFilter">
-
                             <v-text-field
                                     v-model="paramSearch"
                                     label="Search"
@@ -41,7 +40,7 @@
                     <v-col>
                         <v-list>
                             <v-list-item
-                                    v-for="petition in petitions" :key="petition">
+                                    v-for="petition in petitions.slice(amountPerPage * (page - 1), amountPerPage * page)" :key="petition">
                                 <v-list-item-content>
                                     <v-card
                                             max-width="520"
@@ -90,7 +89,7 @@
                 <div class="text-center">
                     <v-pagination
                             v-model="page"
-                            :length="4"
+                            :length="getPageLength"
                             circle
                     ></v-pagination>
                 </div>
@@ -120,12 +119,19 @@
                 paramCategory: null,
                 paramSortBy: null,
                 paramSearch: null,
+                amountPerPage: 10,
                 page: 1,
             }
         },
         mounted: function () {
             this.getPetitions();
             this.getCategories();
+            // this.calculatePages();
+        },
+        computed: {
+            getPageLength: function(){
+                return Math.ceil(this.petitions.length / this.amountPerPage);
+            }
         },
         methods: {
             clearParams() {
