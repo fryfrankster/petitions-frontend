@@ -8,14 +8,20 @@ export const SERVER_URL = 'http://csse-s365.canterbury.ac.nz:4001/api/v1/';
 let instance = axios.create({
     baseURL: SERVER_URL,
     timeout: 5000,
-    headers: {'X-Authorization': null}
 });
 
 export const apiPetition = {
-    getAllPetitions: () => instance.get('/petitions'),
+    getAllPetitions: (categoryId, sortBy, q) => instance.get('/petitions', {
+        params: {
+            categoryId: categoryId,
+            sortBy: sortBy,
+            q: q,
+        }
+    }),
 
     getOnePetition: (petitionId) => instance.get('/petitions/' + petitionId),
 
+    getAllCategories: () => instance.get('/petitions/categories'),
 };
 
 export const apiUser = {

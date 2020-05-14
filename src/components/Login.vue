@@ -12,6 +12,9 @@
                                     required
                                     @input="$v.email.$touch()"
                                     @blur="$v.email.$touch()"
+                                    filled
+                                    rounded
+                                    dense
                             ></v-text-field>
                             <v-text-field
                                     v-model="password"
@@ -21,6 +24,9 @@
                                     required
                                     @input="$v.password.$touch()"
                                     @blur="$v.password.$touch()"
+                                    filled
+                                    rounded
+                                    dense
                             ></v-text-field>
                             <v-btn class="mr-4" @click="submit">Login</v-btn>
                         </form>

@@ -12,6 +12,9 @@
                                 required
                                 @input="$v.name.$touch()"
                                 @blur="$v.name.$touch()"
+                                filled
+                                rounded
+                                dense
                         ></v-text-field>
                         <v-text-field
                                 v-model="email"
@@ -20,6 +23,9 @@
                                 required
                                 @input="$v.email.$touch()"
                                 @blur="$v.email.$touch()"
+                                filled
+                                rounded
+                                dense
                         ></v-text-field>
                         <v-text-field
                                 v-model="password"
@@ -29,18 +35,27 @@
                                 required
                                 @input="$v.password.$touch()"
                                 @blur="$v.password.$touch()"
+                                filled
+                                rounded
+                                dense
                         ></v-text-field>
                         <v-text-field
                                 v-model="city"
                                 label="City"
                                 @input="$v.city.$touch()"
                                 @blur="$v.city.$touch()"
+                                filled
+                                rounded
+                                dense
                         ></v-text-field>
                         <v-text-field
                                 v-model="country"
                                 label="City"
                                 @input="$v.country.$touch()"
                                 @blur="$v.country.$touch()"
+                                filled
+                                rounded
+                                dense
                         ></v-text-field>
                         <v-btn class="mr-4" @click="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>

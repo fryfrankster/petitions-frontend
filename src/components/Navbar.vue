@@ -8,16 +8,11 @@
                 app
                 height="60"
         >
-
             <v-toolbar-title>Signation</v-toolbar-title>
 
             <v-spacer></v-spacer>
             <v-btn to="/petitions">
                 Browse Petitions
-            </v-btn>
-
-            <v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
             <v-btn icon app class="app-bar-icon" @click.stop="drawer = !drawer">
