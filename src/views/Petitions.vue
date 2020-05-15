@@ -84,6 +84,7 @@
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list>
+                        <p v-if="petitions.length === 0">No Petitions To Show</p>
                     </v-col>
                 </v-row>
                 <div class="text-center">
@@ -126,7 +127,6 @@
         mounted: function () {
             this.getPetitions();
             this.getCategories();
-            // this.calculatePages();
         },
         computed: {
             getPageLength: function(){

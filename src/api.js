@@ -11,13 +11,11 @@ let instance = axios.create({
 });
 
 export const apiPetition = {
-    getAllPetitions: (categoryId, sortBy, q, startIndex, count) => instance.get('/petitions', {
+    getAllPetitions: (categoryId, sortBy, q) => instance.get('/petitions', {
         params: {
             categoryId: categoryId,
             sortBy: sortBy,
             q: q,
-            startIndex: startIndex,
-            count: count
         }
     }),
 

@@ -1,14 +1,21 @@
 <template>
     <div class="single-petition">
         <v-container>
-            <v-card>
-                <v-card-title>{{ petition.title }}</v-card-title>
-                <v-card-text>{{ petition.description }}</v-card-text>
-                <v-img
-                        v-bind:src="petitionPhoto"
-                >
-                </v-img>
-            </v-card>
+            <v-layout>
+                <v-flex xs8 offset-xs2>
+                    <v-card>
+                        <v-card-title>{{ petition.title }}</v-card-title>
+                        <v-img
+                                v-bind:src="petitionPhoto"
+                        >
+                        </v-img>
+                        <v-card-text text>{{ petition.description }}</v-card-text>
+                        <v-card-text>Created on {{ petition.createdDate }} | Closing on {{ petition.closingDate }}</v-card-text>
+                        <v-card-text>{{ petition.category }}</v-card-text>
+                        <v-card-text>{{ petition.signatureCount }}</v-card-text>
+                    </v-card>
+                </v-flex>
+            </v-layout>
         </v-container>
     </div>
 </template>

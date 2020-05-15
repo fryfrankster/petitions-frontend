@@ -38,8 +38,11 @@
 </template>
 
 <script>
-    import {validationMixin} from 'vuelidate'
-    import {required, email, minLength} from 'vuelidate/lib/validators'
+    import {validationMixin} from 'vuelidate';
+    import {required, email, minLength} from 'vuelidate/lib/validators';
+    import {apiUser} from "../api";
+    import {mapActions, mapGetters} from 'vuex';
+
 
     export default {
         mixins: [validationMixin],
@@ -50,6 +53,8 @@
         },
 
         data: () => ({
+            error: "",
+            errorFlag: false,
             email: '',
             password: '',
         }),
@@ -72,8 +77,20 @@
         },
 
         methods: {
+            ...mapActions(["loginUser"]),
+            ...mapGetters(['getUserId', 'getAuthToken']),
+
             submit() {
-                this.$v.$touch()
+                apiUser.login(this.email, this.password)
+                    .then((response) => {
+                        localStorage.setItem('token', response.data.token);
+                        this.loginUser(response.data);
+                        console.log(this.state.token);
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
 
             },
             clear() {
