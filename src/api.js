@@ -30,11 +30,5 @@ export const apiUser = {
         password: password
     }),
 
-    register: (name, email, password, city, country) => instance.post('users/register', {
-        name: name,
-        email: email,
-        password: password,
-        city: city,
-        country: country
-    }),
+    register: (registrationRequest) => instance.post('users/register', registrationRequest),
 };

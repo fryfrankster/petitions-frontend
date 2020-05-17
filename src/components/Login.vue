@@ -5,8 +5,11 @@
                 <v-flex>
                     <v-card flat max-width="500">
                         <form>
+                            <div v-if="errorFlag" style="color: red;">
+                                {{ error }}
+                            </div>
                             <v-text-field
-                                    v-model="email"
+                                    v-model.trim="email"
                                     :error-messages="emailErrors"
                                     label="Email"
                                     required
@@ -17,7 +20,7 @@
                                     dense
                             ></v-text-field>
                             <v-text-field
-                                    v-model="password"
+                                    v-model.trim="password"
                                     :error-messages="passwordErrors"
                                     type="password"
                                     label="Password"
@@ -28,7 +31,7 @@
                                     rounded
                                     dense
                             ></v-text-field>
-                            <v-btn class="mr-4" @click="submit">Login</v-btn>
+                            <v-btn rounded dense class="mr-4" @click.prevent="submit">Login</v-btn>
                         </form>
                     </v-card>
                 </v-flex>
@@ -41,7 +44,7 @@
     import {validationMixin} from 'vuelidate';
     import {required, email, minLength} from 'vuelidate/lib/validators';
     import {apiUser} from "../api";
-    import {mapActions, mapGetters} from 'vuex';
+    import {mapActions} from 'vuex';
 
 
     export default {
@@ -74,22 +77,38 @@
                 !this.$v.password.required && errors.push('Password is required.');
                 return errors;
             },
+            areValid() {
+                return false;
+            },
         },
 
         methods: {
             ...mapActions(["loginUser"]),
-            ...mapGetters(['getUserId', 'getAuthToken']),
 
             submit() {
                 apiUser.login(this.email, this.password)
                     .then((response) => {
                         localStorage.setItem('token', response.data.token);
                         this.loginUser(response.data);
-                        console.log(this.state.token);
+                        this.$router.push('Petitions');
                     })
                     .catch((error) => {
-                        this.error = error;
-                        this.errorFlag = true;
+                        if (error.response.statusText === "Bad Request: invalid email/password supplied") {
+                            this.error = "Incorrect email or password provided";
+                            this.errorFlag = true;
+                        } else {
+                            this.error = error.response.statusText;
+                            this.errorFlag = true;
+                        }
+
+                        // if (error.response.statusText === "Bad Request: data.email should match format \"email\"") {
+                        //     this.error = "Invalid email format";
+                        //     this.errorFlag = true;
+                        // }
+                        // if (error.response.statusText === "Bad Request: data.password should NOT be shorter than 1 characters") {
+                        //     this.error = "Password is a required field";
+                        //     this.errorFlag = true;
+                        // }
                     });
 
             },
