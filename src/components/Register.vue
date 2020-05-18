@@ -49,7 +49,7 @@
                         ></v-text-field>
                         <v-text-field
                                 v-model="registrationData.country"
-                                label="City"
+                                label="Country"
                                 @input="$v.registrationData.country.$touch()"
                                 @blur="$v.registrationData.country.$touch()"
                                 filled
@@ -69,6 +69,7 @@
     import {validationMixin} from 'vuelidate'
     import {required, email, minLength} from 'vuelidate/lib/validators'
     import {apiUser} from "../api";
+    import {mapActions} from "vuex";
 
     export default {
         mixins: [validationMixin],
@@ -118,6 +119,8 @@
         },
 
         methods: {
+            ...mapActions(["loginUser"]),
+
             submit() {
                 let registrationRequest = {
                     name: this.registrationData.name,
@@ -129,13 +132,21 @@
                 if (this.registrationData.country) registrationRequest.country = this.registrationData.country;
 
                 apiUser.register(registrationRequest)
-                    .then((response) => {
-                        console.log(response);
+                    .then(() => {
+                        this.autoLogin();
                     }).catch((error) => {
-                        // this.error = error.response.status;
-                        // this.errorFlag = true;
                     console.log(error);
-                })
+                });
+            },
+            autoLogin() {
+                apiUser.login(this.registrationData.email, this.registrationData.password)
+                    .then((response) => {
+                        localStorage.setItem('token', response.data.token);
+                        this.loginUser(response.data);
+                        this.$router.push('Petitions');
+                    }).catch((error) => {
+                    console.log(error);
+                });
             },
             clear() {
                 this.$v.$reset();

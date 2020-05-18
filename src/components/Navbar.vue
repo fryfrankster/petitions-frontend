@@ -45,8 +45,9 @@
         data: () => ({
             drawer: false,
             group: null,
-            items: {
-            }
+            items: [
+                { title: 'Logout', icon: 'logout'}
+            ]
         }),
 
         watch: {

@@ -31,7 +31,7 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
-    loginUser({ commit }, data) {
+    async loginUser({ commit }, data) {
       commit('SET_USER_ID', data.userId);
       commit('SET_AUTH_TOKEN', data.token);
       commit('SET_LOGGED_IN', data.token !== null);
