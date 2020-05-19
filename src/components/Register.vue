@@ -56,6 +56,18 @@
                                 rounded
                                 dense
                         ></v-text-field>
+
+<!--                        Uploading an image for user-->
+                        <v-btn @click="onPickFile">Upload image</v-btn>
+                        <input
+                                type="file"
+                                style="display: none"
+                                ref="fileInput"
+                                accept="image/*"
+                                @change="onFilePicked"
+                        >
+                        <v-img v-bind:src="imageUrl" height="150"></v-img>
+
                         <v-btn class="mr-4" @click="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>
                     </form>
@@ -85,6 +97,7 @@
         data: () => ({
             error: '',
             errorFlag: '',
+            imageUrl: '',
             registrationData: {
                 name: '',
                 email: '',
@@ -92,6 +105,7 @@
                 city: '',
                 country: '',
             },
+            image: null,
         }),
 
         computed: {
@@ -148,6 +162,8 @@
                     console.log(error);
                 });
             },
+            setUserPhoto() {
+            },
             clear() {
                 this.$v.$reset();
                 this.registrationData.name = '';
@@ -155,6 +171,22 @@
                 this.registrationData.password = '';
                 this.registrationData.city = '';
                 this.registrationData.country = '';
+            },
+            onPickFile() {
+              this.$refs.fileInput.click();
+            },
+            onFilePicked(event) {
+                const files = event.target.files;
+                let filename = files[0].name;
+                if (filename.lastIndexOf('.') <= 0) {
+                    return alert('Please add a valid file');
+                }
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.imageUrl = fileReader.result;
+                });
+                fileReader.readAsDataURL(files[0]);
+                this.image = files[0];
             },
         },
     }

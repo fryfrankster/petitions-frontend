@@ -11,8 +11,16 @@
             <v-toolbar-title>Signation</v-toolbar-title>
 
             <v-spacer></v-spacer>
-            <v-btn to="/petitions">
+            <v-btn class="mr-2" to="/petitions">
                 Browse Petitions
+            </v-btn>
+
+            <v-btn class="mr-2" to="/login">
+                Login
+            </v-btn>
+
+            <v-btn class="mr-2" to="/register">
+                Sign Up
             </v-btn>
 
             <v-btn icon app class="app-bar-icon" @click.stop="drawer = !drawer">
@@ -46,7 +54,7 @@
             drawer: false,
             group: null,
             items: [
-                { title: 'Logout', icon: 'logout'}
+                { title: 'Logout', icon: 'mdi-exit-to-app'}
             ]
         }),
 

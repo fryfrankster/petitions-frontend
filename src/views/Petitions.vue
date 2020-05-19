@@ -1,46 +1,50 @@
 <template>
     <div class="petitions">
         <v-container>
-            <v-layout>
+            <v-layout row wrap justify-space-around>
                 <v-row>
-                    <v-col cols="12" sm="6" md="3" app>
+                    <v-col cols="12" sm="6" md="3">
                         <div class="sortByFilter">
-                            <v-text-field
-                                    v-model="paramSearch"
-                                    label="Search"
-                                    rounded
-                                    dense
-                                    outlined
-                            >
-                            </v-text-field>
-                            <v-select
-                                    v-model="paramSortBy"
-                                    :items="sortByOptions"
-                                    item-text="sortByText"
-                                    item-value="sortByValue"
-                                    label="Sort By"
-                                    dense
-                                    outlined
-                            ></v-select>
-                            <v-select
-                                    v-model="paramCategory"
-                                    :items="categories"
-                                    item-text="name"
-                                    item-value="categoryId"
-                                    name="category"
-                                    label="Category"
-                                    dense
-                                    outlined
-                            ></v-select>
-                            <v-btn @click="getPetitions()">search</v-btn>
-                            <v-btn @click="clearParams()">reset</v-btn>
+
+                            <v-card>
+                                <v-text-field
+                                        v-model="paramSearch"
+                                        label="Search"
+                                        rounded
+                                        dense
+                                        outlined
+                                >
+                                </v-text-field>
+                                <v-select
+                                        v-model="paramSortBy"
+                                        :items="sortByOptions"
+                                        item-text="sortByText"
+                                        item-value="sortByValue"
+                                        label="Sort By"
+                                        dense
+                                        outlined
+                                ></v-select>
+                                <v-select
+                                        v-model="paramCategory"
+                                        :items="categories"
+                                        item-text="name"
+                                        item-value="categoryId"
+                                        name="category"
+                                        label="Category"
+                                        dense
+                                        outlined
+                                ></v-select>
+                                <v-btn @click="getPetitions()">search</v-btn>
+                                <v-btn @click="clearParams()">reset</v-btn>
+                            </v-card>
                         </div>
                     </v-col>
 
                     <v-col>
                         <v-list>
                             <v-list-item
-                                    v-for="petition in petitions.slice(amountPerPage * (page - 1), amountPerPage * page)" :key="petition">
+                                    v-for="petition in petitions.slice(amountPerPage * (page - 1), amountPerPage * page)"
+                                    :key="petition">
                                 <v-list-item-content>
                                     <v-card
                                             max-width="520"
@@ -85,15 +89,16 @@
                             </v-list-item>
                         </v-list>
                         <p v-if="petitions.length === 0">No Petitions To Show</p>
+                        <div class="text-center">
+                            <v-pagination
+                                    v-model="page"
+                                    :length="getPageLength"
+                                    circle
+                            ></v-pagination>
+                        </div>
                     </v-col>
+                    <v-col></v-col>
                 </v-row>
-                <div class="text-center">
-                    <v-pagination
-                            v-model="page"
-                            :length="getPageLength"
-                            circle
-                    ></v-pagination>
-                </div>
             </v-layout>
         </v-container>
     </div>
@@ -129,7 +134,7 @@
             this.getCategories();
         },
         computed: {
-            getPageLength: function(){
+            getPageLength: function () {
                 return Math.ceil(this.petitions.length / this.amountPerPage);
             }
         },
@@ -141,6 +146,7 @@
                 this.getPetitions();
             },
             getPetitions() {
+                this.page = 1;
                 apiPetition.getAllPetitions(this.paramCategory, this.paramSortBy, this.paramSearch)
                     .then((response) => {
                         this.petitions = response.data;

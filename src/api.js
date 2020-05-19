@@ -31,4 +31,6 @@ export const apiUser = {
     }),
 
     register: (registrationRequest) => instance.post('users/register', registrationRequest),
+
+    setPhoto: (userId, image) => instance.put('users/' + userId + '/photo', image),
 };
