@@ -4,7 +4,10 @@
             <v-layout>
                 <v-flex xs8 offset-xs2>
                     <v-card>
-                        <v-card-title>{{ petition.title }}</v-card-title>
+                        <v-row justify="center">
+                            <v-card-title>{{ petition.title }}</v-card-title>
+                        </v-row>
+
                         <v-img
                                 v-bind:src="petitionPhoto"
                         >
@@ -15,10 +18,48 @@
                         <v-card-text>{{ petition.category }}</v-card-text>
                         <v-card-text>{{ petition.signatureCount }}</v-card-text>
                         <v-card-actions>
-                            <v-btn v-on:click="signPetition">
-                                Sign Petition
-                            </v-btn>
+                            <v-row justify="center">
+                                <v-btn v-on:click="signPetition">
+                                    Sign Petition
+                                </v-btn>
+                                <v-btn>
+                                    Remove Signature
+                                </v-btn>
+                                <p>{{ alreadySigned }}</p>
+                            </v-row>
                         </v-card-actions>
+
+                        <!--List of signatures-->
+                        <v-list>
+                            <v-list-item
+                                    v-for="signature in signatures"
+                                    :key="signature">
+                                <v-list-item-content>
+                                    <v-card
+                                            max-width="520"
+                                            class="mx-auto"
+                                    >
+                                        <v-list-item>
+                                            <v-list-item-avatar color="orange">
+                                                <v-img
+                                                        v-bind:src="userPhoto(signature.signatoryId)"
+                                                >
+                                                </v-img>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title
+                                                        v-text="signature.name"
+                                                ></v-list-item-title>
+                                                <v-list-item-subtitle>
+                                                    {{ signature.city }} | {{ signature.country }}
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-card>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
+
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -38,15 +79,21 @@
                 error: "",
                 errorFlag: false,
                 petition: [],
+                signatures: [],
             }
         },
         mounted: function () {
             this.getPetition();
+            this.getSignatures();
         },
         computed: {
             petitionPhoto: function () {
                 return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
-            }
+            },
+            alreadySigned: function() {
+                let hasSigned = this.signatures.find(signature => signature.signatoryId = localStorage.getItem('userId'));
+                return hasSigned;
+            },
         },
         methods: {
             getPetition() {
@@ -63,12 +110,26 @@
                 apiPetition.signPetition(this.petition.petitionId)
                     .then(() => {
                         this.getPetition();
+                        this.getSignatures();
                     })
                     .catch((error) => {
                         this.error = error;
                         this.errorFlag = true;
-                    })
+                    });
             },
+            getSignatures() {
+                apiPetition.getSignatures(this.$route.params.id)
+                    .then((response) => {
+                        this.signatures = response.data;
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
+            },
+            userPhoto(signatoryId) {
+                return rootUrl + "users/" + signatoryId + "/photo";
+            }
         }
     }
 </script>

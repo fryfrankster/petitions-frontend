@@ -37,6 +37,10 @@ export const apiPetition = {
             'X-Authorization': localStorage.getItem('authToken')
         }
     }),
+
+    getSignatures: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures'),
+
+    removeSignature: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures'),
 };
 
 export const apiUser = {
