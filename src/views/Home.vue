@@ -10,6 +10,8 @@
 <!--            <Register></Register>-->
 <!--            <p>Already have an account? Login</p>-->
 <!--        </div>-->
+        <p>{{ this.$store.state.isLoggedIn }}</p>
+        <p>{{ localstorageToken }}</p>
     </div>
 </template>
 
@@ -23,6 +25,11 @@
         data() {
             return {
                 switchToLogin: false
+            }
+        },
+        computed: {
+            localstorageToken() {
+                return localStorage.getItem('authToken')
             }
         },
         methods: {

@@ -5,6 +5,7 @@ import Petitions from "../views/Petitions";
 import Petition from "../views/Petition";
 import Login from "../components/Login";
 import Register from "../components/Register";
+import Profile from "../views/Profile";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
         path: '/petitions/:id',
         name: 'Petition',
         component: Petition
+    },
+    {
+        path: '/profile/:id',
+        name: 'Profile',
+        component: Profile
     },
 ];
 

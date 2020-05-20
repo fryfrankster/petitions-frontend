@@ -8,6 +8,9 @@ export const SERVER_URL = 'http://csse-s365.canterbury.ac.nz:4001/api/v1/';
 let instance = axios.create({
     baseURL: SERVER_URL,
     timeout: 5000,
+    // headers: {
+    //     'X-Authorization': localStorage.getItem('authToken')
+    // }
 });
 
 export const apiPetition = {
@@ -22,6 +25,12 @@ export const apiPetition = {
     getOnePetition: (petitionId) => instance.get('/petitions/' + petitionId),
 
     getAllCategories: () => instance.get('/petitions/categories'),
+
+    getUserPetitions: (authorId) => instance.get('/petitions', {
+        params: {
+            authorId: authorId,
+        }
+    }),
 };
 
 export const apiUser = {
@@ -30,7 +39,15 @@ export const apiUser = {
         password: password
     }),
 
-    register: (registrationRequest) => instance.post('users/register', registrationRequest),
+    logout: () => instance.post('users/logout'),
 
-    setPhoto: (userId, image) => instance.put('users/' + userId + '/photo', image),
+    register: (registrationRequest) => instance.post('/users/register', registrationRequest),
+
+    getUser: (userId) => instance.get('/users/' + userId, {
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
+
+    setPhoto: (userId, image) => instance.put('/users/' + userId + '/photo', image),
 };

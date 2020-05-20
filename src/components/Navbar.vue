@@ -11,6 +11,10 @@
             <v-toolbar-title>Signation</v-toolbar-title>
 
             <v-spacer></v-spacer>
+            <v-btn class="mr-2" to="/">
+                Home
+            </v-btn>
+
             <v-btn class="mr-2" to="/petitions">
                 Browse Petitions
             </v-btn>
@@ -19,50 +23,43 @@
                 Login
             </v-btn>
 
+            <v-btn class="mr-2" v-on:click="logoutUser">
+                Logout
+            </v-btn>
+
             <v-btn class="mr-2" to="/register">
                 Sign Up
             </v-btn>
 
-            <v-btn icon app class="app-bar-icon" @click.stop="drawer = !drawer">
-                <v-icon>mdi-account</v-icon>
+            <v-btn class="mr-2" v-bind:to="'/profile/' + this.$store.state.userId">
+                Profile
             </v-btn>
+
         </v-app-bar>
-
-        <v-navigation-drawer v-model="drawer" app dark right class="deep-purple accent-4">
-            <v-list>
-                <v-list-item
-                        v-for="item in items"
-                        :key="item.title"
-                        link
-                >
-                    <v-list-item-icon>
-                        <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-item-icon>
-
-                    <v-list-item-content>
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
     </div>
 </template>
 
 <script>
+    import {apiUser} from "../api";
+    import {mapActions} from "vuex";
+
     export default {
         data: () => ({
-            drawer: false,
-            group: null,
-            items: [
-                { title: 'Logout', icon: 'mdi-exit-to-app'}
-            ]
         }),
+        methods: {
+            ...mapActions(["logout"]),
 
-        watch: {
-            group () {
-                this.drawer = false
-            },
-        },
+            logoutUser() {
+                apiUser.logout()
+                    .then((response) => {
+                        localStorage.removeItem('authToken');
+                        this.logout(response.data);
+                        this.$router.push('/');
+                    }).catch((error) => {
+                    console.log(error);
+                });
+            }
+        }
     }
 </script>
 

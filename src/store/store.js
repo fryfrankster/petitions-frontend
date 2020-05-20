@@ -6,7 +6,7 @@ export const store = new Vuex.Store({
   state: {
     userId: null,
     authToken: null,
-    isLoggedIn: localStorage.token !== null,
+    isLoggedIn: localStorage.getItem('authToken') !== null,
   },
   mutations: {
     SET_USER_ID(state, userId) {
@@ -34,7 +34,13 @@ export const store = new Vuex.Store({
     async loginUser({ commit }, data) {
       commit('SET_USER_ID', data.userId);
       commit('SET_AUTH_TOKEN', data.token);
-      commit('SET_LOGGED_IN', data.token !== null);
+      commit('SET_LOGGED_IN', true);
+    },
+
+    logout({ commit }, data) {
+      commit('SET_USER_ID', data.userId);
+      commit('SET_AUTH_TOKEN', data.token);
+      commit('SET_LOGGED_IN', false);
     }
   },
 });
