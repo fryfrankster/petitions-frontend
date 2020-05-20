@@ -31,6 +31,12 @@ export const apiPetition = {
             authorId: localStorage.getItem('userId'),
         }
     }),
+
+    signPetition: (petitionId) => instance.post('/petitions/' + petitionId + '/signatures', {},{
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
 };
 
 export const apiUser = {

@@ -4,7 +4,7 @@
             <v-layout>
                 <v-flex xs8 offset-xs2>
                     <v-col>
-                        <v-card class="pa-7">
+                        <v-card class="pa-7 ma-7">
                             <v-row justify="center">
                                 <v-avatar color="orange" size="150">
                                     <v-img
@@ -26,9 +26,11 @@
                             </v-row>
                         </v-card>
 
-                        <v-card>
+                        <v-card class="pa-7 ma-7">
                             <v-row justify="center">
                                 <v-card-title>My Petitions</v-card-title>
+                            </v-row>
+                            <v-row justify="center">
                                 <v-list>
                                     <v-list-item
                                             v-for="petition in petitions"
@@ -82,6 +84,7 @@
         },
         mounted: function () {
             this.getUser();
+            this.getPetitions();
         },
         computed: {
             userPhoto: function () {
@@ -110,7 +113,7 @@
                     });
             },
             viewPetition(petitionId) {
-                this.$router.push("petitions/" + petitionId);
+                this.$router.push({path: "/petitions/" + petitionId});
             },
         }
     }

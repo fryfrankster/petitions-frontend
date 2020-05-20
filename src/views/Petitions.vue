@@ -5,13 +5,13 @@
                 <v-row>
                     <v-col cols="12" sm="6" md="3">
                         <div class="sortByFilter">
-
-                            <v-card>
+                            <v-card
+                                    class="pa-3"
+                            >
                                 <v-text-field
                                         v-model="paramSearch"
                                         label="Search"
                                         rounded
-                                        dense
                                         outlined
                                 >
                                 </v-text-field>
@@ -73,6 +73,7 @@
                                             <v-btn
                                                     text
                                                     color="deep-purple accent-4"
+                                                    v-on:click="signPetition(petition.petitionId)"
                                             >
                                                 Sign Petition
                                             </v-btn>
@@ -171,7 +172,17 @@
                         this.error = error;
                         this.errorFlag = true;
                     });
-            }
+            },
+            signPetition(petitionId) {
+                apiPetition.signPetition(petitionId)
+                    .then(() => {
+                        this.getPetitions();
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    })
+            },
         }
     }
 </script>
