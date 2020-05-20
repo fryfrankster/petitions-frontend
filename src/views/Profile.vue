@@ -90,7 +90,7 @@
         },
         methods: {
             getUser() {
-                apiUser.getUser(this.$store.state.userId)
+                apiUser.getUser()
                     .then((response) => {
                         this.userDetails = response.data;
                     })
@@ -100,7 +100,7 @@
                     });
             },
             getPetitions() {
-                apiPetition.getUserPetitions(this.$store.state.userId)
+                apiPetition.getUserPetitions()
                     .then((response) => {
                         this.petitions = response.data;
                     })

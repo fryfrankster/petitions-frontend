@@ -6,7 +6,7 @@ export const store = new Vuex.Store({
   state: {
     userId: null,
     authToken: null,
-    isLoggedIn: localStorage.getItem('authToken') !== null,
+    isLoggedIn: localStorage.getItem('authToken'),
   },
   mutations: {
     SET_USER_ID(state, userId) {

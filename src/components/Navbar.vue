@@ -19,21 +19,26 @@
                 Browse Petitions
             </v-btn>
 
-            <v-btn class="mr-2" to="/login">
-                Login
-            </v-btn>
+            <div v-if="this.$store.state.isLoggedIn">
+                <v-btn class="mr-2" v-bind:to="'/profile/' + this.$store.state.userId">
+                    Profile
+                </v-btn>
 
-            <v-btn class="mr-2" v-on:click="logoutUser">
-                Logout
-            </v-btn>
+                <v-btn class="mr-2" v-on:click="logoutUser">
+                    Logout
+                </v-btn>
+            </div>
 
-            <v-btn class="mr-2" to="/register">
-                Sign Up
-            </v-btn>
+            <div v-else>
+                <v-btn class="mr-2" to="/login">
+                    Login
+                </v-btn>
 
-            <v-btn class="mr-2" v-bind:to="'/profile/' + this.$store.state.userId">
-                Profile
-            </v-btn>
+                <v-btn class="mr-2" to="/register">
+                    Sign Up
+                </v-btn>
+            </div>
+
 
         </v-app-bar>
     </div>
@@ -52,7 +57,7 @@
             logoutUser() {
                 apiUser.logout()
                     .then((response) => {
-                        localStorage.removeItem('authToken');
+                        localStorage.clear();
                         this.logout(response.data);
                         this.$router.push('/');
                     }).catch((error) => {

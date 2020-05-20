@@ -155,6 +155,7 @@
             autoLogin() {
                 apiUser.login(this.registrationData.email, this.registrationData.password)
                     .then((response) => {
+                        localStorage.setItem('userId', response.data.userId);
                         localStorage.setItem('authToken', response.data.token);
                         this.loginUser(response.data);
                         this.$router.push('Petitions');

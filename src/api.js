@@ -26,9 +26,9 @@ export const apiPetition = {
 
     getAllCategories: () => instance.get('/petitions/categories'),
 
-    getUserPetitions: (authorId) => instance.get('/petitions', {
+    getUserPetitions: () => instance.get('/petitions', {
         params: {
-            authorId: authorId,
+            authorId: localStorage.getItem('userId'),
         }
     }),
 };
@@ -39,11 +39,15 @@ export const apiUser = {
         password: password
     }),
 
-    logout: () => instance.post('users/logout'),
+    logout: () => instance.post('users/logout', {},{
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
 
     register: (registrationRequest) => instance.post('/users/register', registrationRequest),
 
-    getUser: (userId) => instance.get('/users/' + userId, {
+    getUser: () => instance.get('/users/' + localStorage.getItem('userId'), {
         headers: {
             'X-Authorization': localStorage.getItem('authToken')
         }
