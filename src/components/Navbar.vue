@@ -20,7 +20,7 @@
             </v-btn>
 
             <div v-if="this.$store.state.isLoggedIn">
-                <v-btn class="mr-2" v-bind:to="'/profile/' + this.$store.state.userId">
+                <v-btn class="mr-2" to="/profile">
                     Profile
                 </v-btn>
 

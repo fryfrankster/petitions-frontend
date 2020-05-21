@@ -8,7 +8,7 @@
                             <v-row justify="center">
                                 <v-avatar color="orange" size="150">
                                     <v-img
-                                            v-bind:src="userPhoto(this.$route.params.id)"
+                                            v-bind:src="userPhoto()"
                                     >
                                     </v-img>
                                 </v-avatar>
@@ -196,8 +196,8 @@
             viewPetition(petitionId) {
                 this.$router.push({path: "/petitions/" + petitionId});
             },
-            userPhoto(userId) {
-                return rootUrl + "users/" + userId + "/photo";
+            userPhoto() {
+                return rootUrl + "users/" + localStorage.getItem('userId') + "/photo";
             },
             getCategories() {
                 apiPetition.getAllCategories()

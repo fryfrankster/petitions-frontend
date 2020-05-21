@@ -36,7 +36,7 @@ const routes = [
         component: Petition
     },
     {
-        path: '/profile/:id',
+        path: '/profile',
         name: 'Profile',
         component: Profile
     },
