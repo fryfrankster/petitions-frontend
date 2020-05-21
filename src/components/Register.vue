@@ -157,13 +157,19 @@
                     .then((response) => {
                         localStorage.setItem('userId', response.data.userId);
                         localStorage.setItem('authToken', response.data.token);
+                        this.setUserPhoto(response.data.userId, this.image);
                         this.loginUser(response.data);
                         this.$router.push('Petitions');
                     }).catch((error) => {
                     console.log(error);
                 });
             },
-            setUserPhoto() {
+            setUserPhoto(userId, image) {
+                apiUser.setPhoto(userId, image).then(() => {
+                }).catch((error) => {
+                        console.log(error);
+                    }
+                );
             },
             clear() {
                 this.$v.$reset();

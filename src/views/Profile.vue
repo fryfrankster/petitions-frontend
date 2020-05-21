@@ -33,53 +33,69 @@
                             <v-row justify="center">
                                 <v-dialog v-model="dialog" persistent max-width="600px">
                                     <template v-slot:activator="{ on }">
-                                        <v-btn color="primary" dark v-on="on">Create new petition</v-btn>
+                                        <v-btn color="orange" dark v-on="on">Create new petition</v-btn>
                                     </template>
                                     <v-card>
                                         <v-card-title>
-                                            <span class="headline">User Profile</span>
+                                            <span class="headline">New Petition</span>
                                         </v-card-title>
                                         <v-card-text>
                                             <v-container>
                                                 <v-row>
-                                                    <v-col cols="12" sm="6" md="4">
-                                                        <v-text-field label="Legal first name*" required></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="6" md="4">
-                                                        <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                                                    </v-col>
-                                                    <v-col cols="12" sm="6" md="4">
+
+                                                    <v-col cols="12">
                                                         <v-text-field
-                                                                label="Legal last name*"
-                                                                hint="example of persistent helper text"
-                                                                persistent-hint
+                                                                v-model="form.title"
+                                                                label="Title*"
                                                                 required
                                                         ></v-text-field>
                                                     </v-col>
+
                                                     <v-col cols="12">
-                                                        <v-text-field label="Email*" required></v-text-field>
+                                                        <v-text-field
+                                                                v-model="form.description"
+                                                                label="Description*"
+                                                                required
+                                                        ></v-text-field>
                                                     </v-col>
-                                                    <v-col cols="12">
-                                                        <v-text-field label="Password*" type="password" required></v-text-field>
-                                                    </v-col>
+
                                                     <v-col cols="12" sm="6">
                                                         <v-select
-                                                                :items="['0-17', '18-29', '30-54', '54+']"
-                                                                label="Age*"
+                                                                v-model="form.categoryId"
+                                                                :items="categories"
+                                                                item-text="name"
+                                                                item-value="categoryId"
+                                                                label="Category*"
                                                                 required
                                                         ></v-select>
                                                     </v-col>
+
                                                     <v-col cols="12" sm="6">
-                                                        <v-autocomplete
-                                                                :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                                                                label="Interests"
-                                                                multiple
-                                                        ></v-autocomplete>
+                                                        <v-text-field
+                                                                v-model="form.closingDate"
+                                                                label="Closing Date*"
+                                                        ></v-text-field>
                                                     </v-col>
+
+                                                    <v-col cols="12">
+                                                        <!--Uploading an image for petition-->
+                                                        <v-btn @click="onPickFile">Upload image</v-btn>
+                                                        <input
+                                                                type="file"
+                                                                style="display: none"
+                                                                ref="fileInput"
+                                                                accept="image/*"
+                                                                @change="onFilePicked"
+                                                        >
+                                                        <v-img v-bind:src="imageUrl" height="150"></v-img>
+                                                    </v-col>
+
                                                 </v-row>
                                             </v-container>
                                             <small>*indicates required field</small>
                                         </v-card-text>
+
+                                        <!--Save and close-->
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
@@ -139,11 +155,21 @@
                 dialog: false,
                 userDetails: [],
                 petitions: [],
+                categories: [],
+                image: null,
+                imageUrl: '',
+                form: {
+                    title: '',
+                    description: '',
+                    categoryId: '',
+                    closingDate: '',
+                }
             }
         },
         mounted: function () {
             this.getUser();
             this.getPetitions();
+            this.getCategories();
         },
         computed: {
         },
@@ -173,7 +199,33 @@
             },
             userPhoto(userId) {
                 return rootUrl + "users/" + userId + "/photo";
-            }
+            },
+            getCategories() {
+                apiPetition.getAllCategories()
+                    .then((response) => {
+                        this.categories = response.data;
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
+            },
+            onPickFile() {
+                this.$refs.fileInput.click();
+            },
+            onFilePicked(event) {
+                const files = event.target.files;
+                let filename = files[0].name;
+                if (filename.lastIndexOf('.') <= 0) {
+                    return alert('Please add a valid file');
+                }
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.imageUrl = fileReader.result;
+                });
+                fileReader.readAsDataURL(files[0]);
+                this.image = files[0];
+            },
         }
     }
 </script>

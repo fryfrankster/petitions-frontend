@@ -63,5 +63,10 @@ export const apiUser = {
         }
     }),
 
-    setPhoto: (userId, image) => instance.put('/users/' + userId + '/photo', image),
+    setPhoto: (userId, image) => instance.put('/users/' + userId + '/photo', image, {
+        headers: {
+            'Content-Type': image.type,
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
 };

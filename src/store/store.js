@@ -4,8 +4,8 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    userId: null,
-    authToken: null,
+    userId: localStorage.getItem('userId'),
+    authToken: localStorage.getItem('authToken'),
     isLoggedIn: localStorage.getItem('authToken'),
   },
   mutations: {
