@@ -43,7 +43,7 @@ export const apiPetition = {
 
     getSignatures: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures'),
 
-    removeSignature: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures', {
+    removeSignature: (petitionId) => instance.delete('/petitions/' + petitionId + '/signatures', {
         headers: {
             'X-Authorization': localStorage.getItem('authToken')
         }
