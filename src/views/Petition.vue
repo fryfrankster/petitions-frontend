@@ -12,17 +12,25 @@
                                 v-bind:src="petitionPhoto"
                         >
                         </v-img>
-                        <v-card-text text>{{ petition.description }}</v-card-text>
-                        <v-card-text>Created on {{ petition.createdDate }} | Closing on {{ petition.closingDate }}
+                        <v-card-text text>
+                            {{ petition.description }}
                         </v-card-text>
-                        <v-card-text>{{ petition.category }}</v-card-text>
-                        <v-card-text>{{ petition.signatureCount }}</v-card-text>
+                        <v-card-text>
+                            Created on {{ petition.createdDate }} | Closing on {{ petition.closingDate }}
+                        </v-card-text>
+                        <v-card-text>
+                            {{ petition.category }}
+                        </v-card-text>
+                        <v-card-text>
+                            {{ petition.signatureCount }}
+                        </v-card-text>
+
                         <v-card-actions>
                             <v-row justify="center">
                                 <v-btn v-on:click="signPetition">
                                     Sign Petition
                                 </v-btn>
-                                <v-btn>
+                                <v-btn v-on:click="unSignPetition">
                                     Remove Signature
                                 </v-btn>
                             </v-row>
@@ -89,10 +97,6 @@
             petitionPhoto: function () {
                 return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
             },
-            // alreadySigned: function() {
-            //     let hasSigned = this.signatures.find(signature => signature.signatoryId = localStorage.getItem('userId'));
-            //     return hasSigned;
-            // },
         },
         methods: {
             getPetition() {
@@ -116,6 +120,17 @@
                         this.errorFlag = true;
                     });
             },
+            unSignPetition() {
+                apiPetition.removeSignature(this.petition.petitionId)
+                    .then(() => {
+                        this.getPetition();
+                        this.getSignatures();
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
+            },
             getSignatures() {
                 apiPetition.getSignatures(this.$route.params.id)
                     .then((response) => {
@@ -128,7 +143,11 @@
             },
             userPhoto(signatoryId) {
                 return rootUrl + "users/" + signatoryId + "/photo";
-            }
+            },
+            // alreadySigned() {
+            //     this.hasSigned = this.signatures.find(signature => signature.signatoryId = localStorage.getItem('userId')).length === 1;
+            //         console.log(this.hasSigned);
+            // },
         }
     }
 </script>

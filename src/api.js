@@ -8,9 +8,6 @@ export const SERVER_URL = 'http://csse-s365.canterbury.ac.nz:4001/api/v1/';
 let instance = axios.create({
     baseURL: SERVER_URL,
     timeout: 5000,
-    // headers: {
-    //     'X-Authorization': localStorage.getItem('authToken')
-    // }
 });
 
 export const apiPetition = {
@@ -46,7 +43,11 @@ export const apiPetition = {
 
     getSignatures: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures'),
 
-    removeSignature: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures'),
+    removeSignature: (petitionId) => instance.get('/petitions/' + petitionId + '/signatures', {
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
 };
 
 export const apiUser = {
