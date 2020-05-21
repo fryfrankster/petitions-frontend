@@ -42,7 +42,6 @@
                                         <v-card-text>
                                             <v-container>
                                                 <v-row>
-
                                                     <v-col cols="12">
                                                         <v-text-field
                                                                 v-model="form.title"
@@ -87,7 +86,7 @@
                                                                 accept="image/*"
                                                                 @change="onFilePicked"
                                                         >
-                                                        <v-img v-bind:src="imageUrl" height="150"></v-img>
+                                                        <v-img v-bind:src="petitionImageUrl" height="150"></v-img>
                                                     </v-col>
 
                                                 </v-row>
@@ -99,7 +98,7 @@
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                                            <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                                            <v-btn color="blue darken-1" text v-on:click="newPetition">Save</v-btn>
                                         </v-card-actions>
                                     </v-card>
                                 </v-dialog>
@@ -156,8 +155,8 @@
                 userDetails: [],
                 petitions: [],
                 categories: [],
-                image: null,
-                imageUrl: '',
+                petitionImage: null,
+                petitionImageUrl: '',
                 form: {
                     title: '',
                     description: '',
@@ -210,6 +209,20 @@
                         this.errorFlag = true;
                     });
             },
+            newPetition() {
+                let formRequest = {
+                    title: this.form.title,
+                    description: this.form.description,
+                    categoryId: this.form.categoryId
+                };
+                if (this.form.closingDate) formRequest.closingDate = this.form.closingDate;
+
+                apiPetition.createPetition(formRequest)
+                    .then((response) => {
+                        console.log(response.data);
+                        this.newPetition();
+                    }).catch();
+            },
             onPickFile() {
                 this.$refs.fileInput.click();
             },
@@ -221,10 +234,10 @@
                 }
                 const fileReader = new FileReader();
                 fileReader.addEventListener('load', () => {
-                    this.imageUrl = fileReader.result;
+                    this.petitionImageUrl = fileReader.result;
                 });
                 fileReader.readAsDataURL(files[0]);
-                this.image = files[0];
+                this.petitionImage = files[0];
             },
         }
     }

@@ -24,6 +24,12 @@ export const apiPetition = {
 
     getOnePetition: (petitionId) => instance.get('/petitions/' + petitionId),
 
+    createPetition: (data) => instance.post('/petitions', data, {
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
+
     getAllCategories: () => instance.get('/petitions/categories'),
 
     getUserPetitions: () => instance.get('/petitions', {

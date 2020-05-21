@@ -25,7 +25,6 @@
                                 <v-btn>
                                     Remove Signature
                                 </v-btn>
-                                <p>{{ alreadySigned }}</p>
                             </v-row>
                         </v-card-actions>
 
@@ -90,10 +89,10 @@
             petitionPhoto: function () {
                 return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
             },
-            alreadySigned: function() {
-                let hasSigned = this.signatures.find(signature => signature.signatoryId = localStorage.getItem('userId'));
-                return hasSigned;
-            },
+            // alreadySigned: function() {
+            //     let hasSigned = this.signatures.find(signature => signature.signatoryId = localStorage.getItem('userId'));
+            //     return hasSigned;
+            // },
         },
         methods: {
             getPetition() {
