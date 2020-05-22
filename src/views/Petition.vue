@@ -9,6 +9,7 @@
                         </v-row>
 
                         <v-img
+                                max-height="500"
                                 v-bind:src="petitionPhoto"
                         >
                         </v-img>
@@ -25,20 +26,39 @@
                             {{ petition.signatureCount }}
                         </v-card-text>
 
-<!--                        <v-card-actions>-->
-<!--                            <v-row justify="center">-->
-<!--                                <div v-if="!alreadySigned">-->
-<!--                                    <v-btn v-on:click="signPetition">-->
-<!--                                        Sign Petition-->
-<!--                                    </v-btn>-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <v-btn v-on:click="unSignPetition">-->
-<!--                                        Remove Signature-->
-<!--                                    </v-btn>-->
-<!--                                </div>-->
-<!--                            </v-row>-->
-<!--                        </v-card-actions>-->
+                        <!--Signing petition or deleting if they are the creator-->
+                        <v-card-actions>
+                            <v-row justify="center">
+
+                                <div v-if="creator">
+                                    <v-btn
+                                            class="ma-1"
+                                    >
+                                        Edit Petition
+                                    </v-btn>
+                                    <v-btn
+                                            color="red white--text"
+                                            class="ma-1"
+                                            v-on:click="removePetition"
+                                    >
+                                        Delete Petition
+                                    </v-btn>
+                                </div>
+
+                                <div v-else>
+                                    <div v-if="alreadySigned">
+                                        <v-btn v-on:click="unSignPetition" color="orange white--text">
+                                            Remove Signature
+                                        </v-btn>
+                                    </div>
+                                    <div v-else>
+                                        <v-btn v-on:click="signPetition" color="orange white--text">
+                                            Sign Petition
+                                        </v-btn>
+                                    </div>
+                                </div>
+                            </v-row>
+                        </v-card-actions>
 
                         <!--List of signatures-->
                         <v-list>
@@ -100,16 +120,19 @@
             petitionPhoto: function () {
                 return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
             },
-            // alreadySigned: function () {
-            //     let hasSigned = false;
-            //     for (let petition in this.petitions) {
-            //         if (petition.signatoryId === localStorage.getItem('userId')) {
-            //             hasSigned = true;
-            //             break;
-            //         }
-            //     }
-            //     return hasSigned;
-            // }
+            alreadySigned: function () {
+                let hasSigned = false;
+                for (let i = 0; i < this.signatures.length; i++) {
+                    if (this.signatures[i].signatoryId == localStorage.getItem('userId')) {
+                        hasSigned = true;
+                        break;
+                    }
+                }
+                return hasSigned;
+            },
+            creator: function () {
+                return this.petition.authorId == localStorage.getItem('userId');
+            }
         },
         methods: {
             getPetition() {
@@ -157,10 +180,15 @@
             userPhoto(signatoryId) {
                 return rootUrl + "users/" + signatoryId + "/photo";
             },
-            // alreadySigned() {
-            //     this.hasSigned = this.signatures.find(signature => signature.signatoryId = localStorage.getItem('userId')).length === 1;
-            //         console.log(this.hasSigned);
-            // },
+            removePetition() {
+                apiPetition.deletePetition(this.petition.petitionId)
+                    .then(() => {
+                        this.$router.push({path: '/petitions'});
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                })
+            }
         }
     }
 </script>

@@ -27,6 +27,12 @@ export const apiPetition = {
         }
     }),
 
+    deletePetition: (petitionId) => instance.delete('/petitions/' + petitionId, {
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
+
     getAllCategories: () => instance.get('/petitions/categories'),
 
     getUserPetitions: () => instance.get('/petitions', {
