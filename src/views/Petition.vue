@@ -13,19 +13,20 @@
                                 v-bind:src="petitionPhoto"
                         >
                         </v-img>
-                        <v-card-text text>
-                            {{ petition.description }}
-                        </v-card-text>
-                        <v-card-text>
-                            Created on {{ petition.createdDate }} | Closing on {{ petition.closingDate }}
-                        </v-card-text>
-                        <v-card-text>
-                            {{ petition.category }}
-                        </v-card-text>
-                        <v-card-text>
-                            {{ petition.signatureCount }}
-                        </v-card-text>
-
+                        <div class="pa-8">
+                            <v-card-text>
+                                {{ petition.category }}
+                            </v-card-text>
+                            <v-card-text>
+                                Created on {{ petition.createdDate }} | Closing on {{ petition.closingDate }}
+                            </v-card-text>
+                            <v-card-text>
+                                {{ petition.description }}
+                            </v-card-text>
+                            <v-card-text>
+                                {{ petition.signatureCount }}
+                            </v-card-text>
+                        </div>
                         <!--Signing petition or deleting if they are the creator-->
                         <v-card-actions>
                             <v-row justify="center">
@@ -47,7 +48,9 @@
 
                                 <div v-else>
                                     <div v-if="alreadySigned">
-                                        <v-btn v-on:click="unSignPetition" color="orange white--text">
+                                        <v-btn v-on:click="unSignPetition"
+                                               color="red white--text"
+                                        >
                                             Remove Signature
                                         </v-btn>
                                     </div>
@@ -187,7 +190,7 @@
                     })
                     .catch((error) => {
                         console.log(error);
-                })
+                    })
             }
         }
     }

@@ -8,7 +8,7 @@
                             <v-row justify="center">
                                 <v-avatar color="orange" size="150">
                                     <v-img
-                                            v-bind:src="userPhoto()"
+                                            v-bind:src="userPhoto"
                                     >
                                     </v-img>
                                 </v-avatar>
@@ -26,10 +26,13 @@
                             </v-row>
                         </v-card>
 
-                        <v-card class="pa-7 ma-7">
+                        <v-card
+                                class="pa-7 ma-7"
+                        >
                             <v-row justify="center">
                                 <v-card-title>My Petitions</v-card-title>
                             </v-row>
+
                             <v-row justify="center">
                                 <v-dialog v-model="dialog" persistent max-width="600px">
                                     <template v-slot:activator="{ on }">
@@ -103,6 +106,7 @@
                                     </v-card>
                                 </v-dialog>
                             </v-row>
+
                             <v-row justify="center">
                                 <v-list>
                                     <v-list-item
@@ -110,22 +114,21 @@
                                             :key="petition">
                                         <v-list-item-content>
                                             <v-card
-                                                    max-width="520"
-                                                    class="mx-auto"
+                                                    width="500"
+                                                    v-on:click="viewPetition(petition.petitionId)"
                                             >
                                                 <v-list-item>
                                                     <v-list-item-content>
                                                         <v-list-item-title
                                                                 v-text="petition.title"
-                                                                @click="viewPetition(petition.petitionId)"
                                                         ></v-list-item-title>
                                                         <v-list-item-subtitle
                                                                 v-text="petition.authorName">
                                                         </v-list-item-subtitle>
                                                     </v-list-item-content>
                                                 </v-list-item>
-                                                <v-card-text>{{ petition.signatureCount }} Signatures | {{
-                                                    petition.category }}
+                                                <v-card-text>
+                                                    {{ petition.signatureCount }} Signatures | {{ petition.category }}
                                                 </v-card-text>
                                             </v-card>
                                         </v-list-item-content>
@@ -170,8 +173,7 @@
             this.getPetitions();
             this.getCategories();
         },
-        computed: {
-        },
+        computed: {},
         methods: {
             getUser() {
                 apiUser.getUser()
@@ -225,7 +227,7 @@
                         this.getPetitions();
                         this.dialog = false;
                     }).catch((error) => {
-                        console.log(error);
+                    console.log(error);
                 });
             },
             signPetition(petitionId) {
