@@ -35,7 +35,7 @@ export const apiPetition = {
         }
     }),
 
-    signPetition: (petitionId) => instance.post('/petitions/' + petitionId + '/signatures', {},{
+    addSignature: (petitionId) => instance.post('/petitions/' + petitionId + '/signatures', {},{
         headers: {
             'X-Authorization': localStorage.getItem('authToken')
         }

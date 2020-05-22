@@ -216,14 +216,24 @@
                     categoryId: this.form.categoryId
                 };
                 if (this.form.closingDate) formRequest.closingDate = this.form.closingDate;
-
                 apiPetition.createPetition(formRequest)
                     .then((response) => {
                         console.log(response.data);
                         this.setPetitionPhoto(response.data.petitionId, this.petitionImage);
+                        this.signPetition(response.data.petitionId);
+                        this.getUser();
+                        this.getPetitions();
                         this.dialog = false;
-                        this.getUserPetitions();
-                    }).catch();
+                    }).catch((error) => {
+                        console.log(error);
+                });
+            },
+            signPetition(petitionId) {
+                apiPetition.addSignature(petitionId)
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
             },
             setPetitionPhoto(petitionId, image) {
                 apiPetition.setPhoto(petitionId, image).then(() => {

@@ -25,16 +25,20 @@
                             {{ petition.signatureCount }}
                         </v-card-text>
 
-                        <v-card-actions>
-                            <v-row justify="center">
-                                <v-btn v-on:click="signPetition">
-                                    Sign Petition
-                                </v-btn>
-                                <v-btn v-on:click="unSignPetition">
-                                    Remove Signature
-                                </v-btn>
-                            </v-row>
-                        </v-card-actions>
+<!--                        <v-card-actions>-->
+<!--                            <v-row justify="center">-->
+<!--                                <div v-if="!alreadySigned">-->
+<!--                                    <v-btn v-on:click="signPetition">-->
+<!--                                        Sign Petition-->
+<!--                                    </v-btn>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <v-btn v-on:click="unSignPetition">-->
+<!--                                        Remove Signature-->
+<!--                                    </v-btn>-->
+<!--                                </div>-->
+<!--                            </v-row>-->
+<!--                        </v-card-actions>-->
 
                         <!--List of signatures-->
                         <v-list>
@@ -66,7 +70,6 @@
                                 </v-list-item-content>
                             </v-list-item>
                         </v-list>
-
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -97,6 +100,16 @@
             petitionPhoto: function () {
                 return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
             },
+            // alreadySigned: function () {
+            //     let hasSigned = false;
+            //     for (let petition in this.petitions) {
+            //         if (petition.signatoryId === localStorage.getItem('userId')) {
+            //             hasSigned = true;
+            //             break;
+            //         }
+            //     }
+            //     return hasSigned;
+            // }
         },
         methods: {
             getPetition() {
@@ -110,7 +123,7 @@
                     });
             },
             signPetition() {
-                apiPetition.signPetition(this.petition.petitionId)
+                apiPetition.addSignature(this.petition.petitionId)
                     .then(() => {
                         this.getPetition();
                         this.getSignatures();
