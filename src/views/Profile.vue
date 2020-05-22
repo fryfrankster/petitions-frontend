@@ -220,8 +220,17 @@
                 apiPetition.createPetition(formRequest)
                     .then((response) => {
                         console.log(response.data);
-                        this.newPetition();
+                        this.setPetitionPhoto(response.data.petitionId, this.petitionImage);
+                        this.dialog = false;
+                        this.getUserPetitions();
                     }).catch();
+            },
+            setPetitionPhoto(petitionId, image) {
+                apiPetition.setPhoto(petitionId, image).then(() => {
+                }).catch((error) => {
+                        console.log(error);
+                    }
+                );
             },
             onPickFile() {
                 this.$refs.fileInput.click();

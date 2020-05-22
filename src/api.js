@@ -48,6 +48,13 @@ export const apiPetition = {
             'X-Authorization': localStorage.getItem('authToken')
         }
     }),
+
+    setPhoto: (petitionId, image) => instance.put('/petitions/' + petitionId + '/photo', image, {
+        headers: {
+            'Content-Type': image.type,
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
 };
 
 export const apiUser = {
@@ -76,4 +83,10 @@ export const apiUser = {
             'X-Authorization': localStorage.getItem('authToken')
         }
     }),
+
+    deletePhoto: (userId) => instance.delete('/users/' + userId + '/photo', {
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    })
 };
