@@ -4,11 +4,12 @@
             <v-layout>
                 <v-flex xs8 offset-xs2>
                     <v-col>
+                        <!--Users Details-->
                         <v-card class="pa-7 ma-7">
                             <v-row justify="center">
                                 <v-avatar color="orange" size="150">
                                     <v-img
-                                            v-bind:src="userPhoto"
+                                            v-bind:src="userPhoto()"
                                     >
                                     </v-img>
                                 </v-avatar>
@@ -20,12 +21,98 @@
                                 <v-card-subtitle>{{ userDetails.email }}</v-card-subtitle>
                             </v-row>
                             <v-row justify="center">
-                                <v-card-text>
+                                <v-card-subtitle>
                                     {{ userDetails.city }} {{ userDetails.country }}
-                                </v-card-text>
+                                </v-card-subtitle>
                             </v-row>
+
+                            <v-row justify="center">
+                                <v-dialog v-model="dialogEditProfile" persistent max-width="600px">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn color="orange" dark v-on="on">Edit Profile</v-btn>
+                                    </template>
+                                    <v-card>
+                                        <v-card-title>
+                                            <span class="headline">Edit Profile</span>
+                                        </v-card-title>
+                                        <v-card-text>
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col cols="12">
+                                                        <v-text-field
+                                                                v-model="edit.name"
+                                                                label="Name"
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col cols="12">
+                                                        <v-text-field
+                                                                v-model="edit.email"
+                                                                label="Email"
+                                                                type="email"
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.city"
+                                                                label="City"
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.country"
+                                                                label="Country"
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.currentPassword"
+                                                                label="Current Password"
+                                                                type="password"
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.password"
+                                                                label="New Password"
+                                                                type="password"
+                                                        ></v-text-field>
+                                                    </v-col>
+
+                                                    <v-col cols="12">
+                                                        <!--Uploading an image for petition-->
+                                                        <v-btn @click="onPickFile">Change image</v-btn>
+                                                        <input
+                                                                type="file"
+                                                                style="display: none"
+                                                                ref="fileInput"
+                                                                accept="image/*"
+                                                                @change="onFilePicked"
+                                                        >
+                                                        <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-container>
+                                        </v-card-text>
+
+                                        <!--Save and close-->
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn color="blue darken-1" text @click="dialogEditProfile = false">Close</v-btn>
+                                            <v-btn color="blue darken-1" text v-on:click="editProfile">Save</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
+                            </v-row>
+
+
                         </v-card>
 
+                        <!--Users Petitions-->
                         <v-card
                                 class="pa-7 ma-7"
                         >
@@ -33,6 +120,7 @@
                                 <v-card-title>My Petitions</v-card-title>
                             </v-row>
 
+                            <!--Dialog pop up for creating a new petition-->
                             <v-row justify="center">
                                 <v-dialog v-model="dialog" persistent max-width="600px">
                                     <template v-slot:activator="{ on }">
@@ -89,9 +177,8 @@
                                                                 accept="image/*"
                                                                 @change="onFilePicked"
                                                         >
-                                                        <v-img v-bind:src="petitionImageUrl" height="150"></v-img>
+                                                        <v-img v-bind:src="imageUrl" height="150"></v-img>
                                                     </v-col>
-
                                                 </v-row>
                                             </v-container>
                                             <small>*indicates required field</small>
@@ -107,6 +194,7 @@
                                 </v-dialog>
                             </v-row>
 
+                            <!--Dialog pop up for creating a new petition-->
                             <v-row justify="center">
                                 <v-list>
                                     <v-list-item
@@ -155,11 +243,20 @@
                 error: "",
                 errorFlag: false,
                 dialog: false,
+                dialogEditProfile: false,
                 userDetails: [],
                 petitions: [],
                 categories: [],
-                petitionImage: null,
-                petitionImageUrl: '',
+                image: null,
+                imageUrl: '',
+                edit: {
+                  name: '',
+                  email: '',
+                  password: '',
+                  currentPassword: '',
+                  city: '',
+                  country: '',
+                },
                 form: {
                     title: '',
                     description: '',
@@ -179,6 +276,10 @@
                 apiUser.getUser()
                     .then((response) => {
                         this.userDetails = response.data;
+                        this.edit.name = this.userDetails.name;
+                        this.edit.email = this.userDetails.email;
+                        this.edit.city = this.userDetails.city;
+                        this.edit.country = this.userDetails.country;
                     })
                     .catch((error) => {
                         this.error = error;
@@ -220,8 +321,7 @@
                 if (this.form.closingDate) formRequest.closingDate = this.form.closingDate;
                 apiPetition.createPetition(formRequest)
                     .then((response) => {
-                        console.log(response.data);
-                        this.setPetitionPhoto(response.data.petitionId, this.petitionImage);
+                        this.setPetitionPhoto(response.data.petitionId, this.image);
                         this.signPetition(response.data.petitionId);
                         this.getUser();
                         this.getPetitions();
@@ -255,11 +355,30 @@
                 }
                 const fileReader = new FileReader();
                 fileReader.addEventListener('load', () => {
-                    this.petitionImageUrl = fileReader.result;
+                    this.imageUrl = fileReader.result;
                 });
                 fileReader.readAsDataURL(files[0]);
-                this.petitionImage = files[0];
+                this.image = files[0];
             },
+            editProfile() {
+                let editRequest = {};
+                if (this.edit.name) editRequest.name = this.edit.name;
+                if (this.edit.email) editRequest.email = this.edit.email;
+                if (this.edit.city) editRequest.city = this.edit.city;
+                if (this.edit.country) editRequest.country = this.edit.country;
+                if (this.edit.password) editRequest.password = this.edit.password;
+                if (this.edit.currentPassword) editRequest.currentPassword = this.edit.currentPassword;
+
+                apiUser.editUser(editRequest, localStorage.getItem('userId'))
+                    .then(() => {
+                        this.getUser();
+                        this.getPetitions();
+                        this.dialogEditProfile = false;
+                    })
+                    .catch((error) => {
+                        console.log(error.response.status);
+                    });
+            }
         }
     }
 </script>

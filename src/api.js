@@ -83,12 +83,20 @@ export const apiUser = {
         }
     }),
 
+    editUser: (data, userId) => instance.patch('/users/' + userId, data, {
+        headers: {
+            'X-Authorization': localStorage.getItem('authToken')
+        }
+    }),
+
     setPhoto: (userId, image) => instance.put('/users/' + userId + '/photo', image, {
         headers: {
             'Content-Type': image.type,
             'X-Authorization': localStorage.getItem('authToken')
         }
     }),
+
+    // getPhoto: (userId) => instance.get("/users/" + userId + "/photo"),
 
     deletePhoto: (userId) => instance.delete('/users/' + userId + '/photo', {
         headers: {
