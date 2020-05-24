@@ -32,11 +32,74 @@
                             <v-row justify="center">
 
                                 <div v-if="creator">
-                                    <v-btn
-                                            class="ma-1"
-                                    >
-                                        Edit Petition
-                                    </v-btn>
+                                    <v-dialog v-model="dialogEditPetition" persistent max-width="600px">
+                                        <template v-slot:activator="{ on }">
+                                            <v-btn color="orange" dark v-on="on">Edit Petition</v-btn>
+                                        </template>
+                                        <v-card>
+                                            <v-card-title>
+                                                <span class="headline">Edit Profile</span>
+                                            </v-card-title>
+                                            <v-card-text>
+                                                <v-container>
+                                                    <v-row>
+                                                        <v-col cols="12">
+                                                            <v-text-field
+                                                                    v-model="edit.title"
+                                                                    label="Name"
+                                                            ></v-text-field>
+                                                        </v-col>
+
+                                                        <v-col cols="12">
+                                                            <v-textarea
+                                                                    v-model="edit.description"
+                                                                    label="Description"
+                                                            ></v-textarea>
+                                                        </v-col>
+
+                                                        <v-col cols="12" sm="6">
+                                                            <v-select
+                                                                    v-model="edit.categoryId"
+                                                                    :items="categories"
+                                                                    item-text="name"
+                                                                    item-value="categoryId"
+                                                                    label="Category"
+                                                            ></v-select>
+                                                        </v-col>
+
+                                                        <v-col cols="12" sm="6">
+                                                            <v-text-field
+                                                                    v-model="edit.closingDate"
+                                                                    label="Closing Date"
+                                                                    hint="DD-MM-YYYY format"
+                                                            ></v-text-field>
+                                                        </v-col>
+
+                                                        <v-col cols="12">
+                                                            <!--Uploading an image for petition-->
+                                                            <v-btn @click="onPickFile">Change image</v-btn>
+                                                            <input
+                                                                    type="file"
+                                                                    style="display: none"
+                                                                    ref="fileInput"
+                                                                    accept="image/*"
+                                                                    @change="onFilePicked"
+                                                            >
+                                                            <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
+                                            </v-card-text>
+
+                                            <!--Save and close-->
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn color="blue darken-1" text @click="dialogEditPetition = false">Close</v-btn>
+                                                <v-btn color="blue darken-1" text v-on:click="editPetition">Save</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+
                                     <v-btn
                                             color="red white--text"
                                             class="ma-1"
@@ -111,13 +174,24 @@
             return {
                 error: "",
                 errorFlag: false,
+                dialogEditPetition: false,
                 petition: [],
                 signatures: [],
+                categories: [],
+                image: null,
+                imageUrl: '',
+                edit: {
+                    title: '',
+                    description: '',
+                    categoryId: '',
+                    closingDate: '',
+                }
             }
         },
         mounted: function () {
             this.getPetition();
             this.getSignatures();
+            this.getCategories();
         },
         computed: {
             petitionPhoto: function () {
@@ -142,11 +216,28 @@
                 apiPetition.getOnePetition(this.$route.params.id)
                     .then((response) => {
                         this.petition = response.data;
+
+                        // Setting values for the edit dialog box
+                        this.edit.title = this.petition.title;
+                        this.edit.description = this.petition.description;
+                        this.edit.categoryId = this.petition.categoryId;
+                        this.edit.closingDate = this.petition.closingDate;
                     })
                     .catch((error) => {
                         this.error = error;
                         this.errorFlag = true;
                     });
+            },
+            editPetition() {
+                let request = {};
+                if (this.edit.title) request.title = this.edit.title;
+                if (this.edit.description) request.description = this.edit.description;
+                if (this.edit.categoryId) request.categoryId = this.edit.categoryId;
+                if (this.edit.closingDate) {
+                    const [day, month, year] = this.edit.closingDate.split('-');
+                    request.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                }
+                apiPetition.updatePetition(this.$route.params.id, request);
             },
             signPetition() {
                 apiPetition.addSignature(this.petition.petitionId)
@@ -180,6 +271,16 @@
                         this.errorFlag = true;
                     });
             },
+            getCategories() {
+                apiPetition.getAllCategories()
+                    .then((response) => {
+                        this.categories = response.data;
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
+            },
             userPhoto(signatoryId) {
                 return rootUrl + "users/" + signatoryId + "/photo";
             },
@@ -191,7 +292,23 @@
                     .catch((error) => {
                         console.log(error);
                     })
-            }
+            },
+            onPickFile() {
+                this.$refs.fileInput.click();
+            },
+            onFilePicked(event) {
+                const files = event.target.files;
+                let filename = files[0].name;
+                if (filename.lastIndexOf('.') <= 0) {
+                    return alert('Please add a valid file');
+                }
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.imageUrl = fileReader.result;
+                });
+                fileReader.readAsDataURL(files[0]);
+                this.image = files[0];
+            },
         }
     }
 </script>

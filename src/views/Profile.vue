@@ -130,6 +130,9 @@
                                         <v-card-title>
                                             <span class="headline">New Petition</span>
                                         </v-card-title>
+                                        <div v-if="errorFlag2" style="color: red;">
+                                            {{ error2 }}
+                                        </div>
                                         <v-card-text>
                                             <v-container>
                                                 <v-row>
@@ -163,7 +166,8 @@
                                                     <v-col cols="12" sm="6">
                                                         <v-text-field
                                                                 v-model="form.closingDate"
-                                                                label="Closing Date*"
+                                                                label="Closing Date"
+                                                                hint="DD-MM-YYYY format"
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -242,6 +246,8 @@
             return {
                 error: "",
                 errorFlag: false,
+                error2: "",
+                errorFlag2: false,
                 dialog: false,
                 dialogEditProfile: false,
                 userDetails: [],
@@ -312,30 +318,52 @@
                         this.errorFlag = true;
                     });
             },
+            clearPetitionForm() {
+                this.edit.title = '';
+                this.edit.description = '';
+                this.edit.categoryId = '';
+                this.edit.closingDate = '';
+            },
+            signPetition(petitionId) {
+                apiPetition.addSignature(petitionId)
+                    .then(() => {
+                        this.getPetitions();
+                        this.getUser();
+                    })
+                    .catch((error) => {
+                        this.error = error;
+                        this.errorFlag = true;
+                    });
+            },
             newPetition() {
                 let formRequest = {
                     title: this.form.title,
                     description: this.form.description,
                     categoryId: this.form.categoryId
                 };
-                if (this.form.closingDate) formRequest.closingDate = this.form.closingDate;
+                if (this.form.closingDate) {
+                    const [day, month, year] = this.form.closingDate.split('-');
+                    formRequest.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                }
                 apiPetition.createPetition(formRequest)
                     .then((response) => {
-                        this.setPetitionPhoto(response.data.petitionId, this.image);
+                        if (this.image !== null) {
+                            this.setPetitionPhoto(response.data.petitionId, this.image);
+                        }
                         this.signPetition(response.data.petitionId);
-                        this.getUser();
-                        this.getPetitions();
                         this.dialog = false;
+                        this.clearPetitionForm();
                     }).catch((error) => {
-                    console.log(error);
+                        console.log(error);
+                        if (error.response.statusText === 'Bad Request: closingDate must be in the future') {
+                            this.error2 = "Closing date must be in the future";
+                            this.errorFlag2 = true;
+                        } else {
+                            this.error2 = error.response.statusText;
+                            this.errorFlag2 = true;
+                        }
                 });
-            },
-            signPetition(petitionId) {
-                apiPetition.addSignature(petitionId)
-                    .catch((error) => {
-                        this.error = error;
-                        this.errorFlag = true;
-                    });
+                this.getPetitions();
             },
             setPetitionPhoto(petitionId, image) {
                 apiPetition.setPhoto(petitionId, image).then(() => {
