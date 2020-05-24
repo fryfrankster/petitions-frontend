@@ -26,6 +26,7 @@
                                 </v-card-subtitle>
                             </v-row>
 
+                            <!--Edit Profile-->
                             <v-row justify="center">
                                 <v-dialog v-model="dialogEditProfile" persistent max-width="600px">
                                     <template v-slot:activator="{ on }">
@@ -35,6 +36,9 @@
                                         <v-card-title>
                                             <span class="headline">Edit Profile</span>
                                         </v-card-title>
+                                        <div class="mx-8" v-if="errorFlag3" style="color: red;">
+                                            {{ error3 }}
+                                        </div>
                                         <v-card-text>
                                             <v-container>
                                                 <v-row>
@@ -50,6 +54,9 @@
                                                                 v-model="edit.email"
                                                                 label="Email"
                                                                 type="email"
+                                                                :error-messages="emailErrors"
+                                                                @input="$v.edit.email.$touch()"
+                                                                @blur="$v.edit.email.$touch()"
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -237,17 +244,27 @@
 
 <script>
     import {apiPetition, apiUser} from "../api";
+    import {validationMixin} from "vuelidate";
+    import {email, required} from "vuelidate/lib/validators";
+
 
     const rootUrl = "http://csse-s365.canterbury.ac.nz:4001/api/v1/";
 
     export default {
-        name: "Profile",
+        mixins: [validationMixin],
+        validations: {
+            edit: {
+                email: {required, email}
+            }
+        },
         data() {
             return {
                 error: "",
                 errorFlag: false,
                 error2: "",
                 errorFlag2: false,
+                error3: "",
+                errorFlag3: false,
                 dialog: false,
                 dialogEditProfile: false,
                 userDetails: [],
@@ -276,7 +293,15 @@
             this.getPetitions();
             this.getCategories();
         },
-        computed: {},
+        computed: {
+            emailErrors() {
+                const errors = [];
+                if (!this.$v.edit.email.$dirty) return errors;
+                !this.$v.edit.email.email && errors.push('Must be valid e-mail');
+                !this.$v.edit.email.required && errors.push('E-mail is required');
+                return errors;
+            },
+        },
         methods: {
             getUser() {
                 apiUser.getUser()
@@ -286,6 +311,7 @@
                         this.edit.email = this.userDetails.email;
                         this.edit.city = this.userDetails.city;
                         this.edit.country = this.userDetails.country;
+                        this.imageUrl = this.userPhoto();
                     })
                     .catch((error) => {
                         this.error = error;
@@ -404,7 +430,13 @@
                         this.dialogEditProfile = false;
                     })
                     .catch((error) => {
-                        console.log(error.response.status);
+                        if (error.response.statusText === "Bad Request: incorrect password") {
+                            this.error3 = "Current password is incorrect";
+                            this.errorFlag3 = true;
+                        } else {
+                            this.error3 = error.response.statusText;
+                            this.errorFlag3 = true;
+                        }
                     });
             }
         }

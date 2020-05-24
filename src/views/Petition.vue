@@ -15,10 +15,10 @@
                         </v-img>
                         <div class="pa-8">
                             <v-card-text>
-                                {{ petition.category }}
+                                <b>Category:</b> {{ petition.category }}
                             </v-card-text>
                             <v-card-text>
-                                Created on {{ petition.createdDate }} | Closing on {{ petition.closingDate }}
+                                <b>Created on:</b> {{ petition.createdDate }} | <b>Closing on:</b> {{ petition.closingDate }}
                             </v-card-text>
                             <v-card-text>
                                 {{ petition.description }}
@@ -43,6 +43,9 @@
                                             <v-card-title>
                                                 <span class="headline">Edit Petition</span>
                                             </v-card-title>
+                                            <div v-if="errorFlag2" style="color: red;">
+                                                {{ error2 }}
+                                            </div>
                                             <v-card-text>
                                                 <v-container>
                                                     <v-row>
@@ -87,6 +90,7 @@
                                                                     ref="fileInput"
                                                                     accept="image/*"
                                                                     @change="onFilePicked"
+                                                                    required
                                                             >
                                                             <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
                                                         </v-col>
@@ -176,6 +180,8 @@
             return {
                 error: "",
                 errorFlag: false,
+                error2: "",
+                errorFlag2: false,
                 dialogEditPetition: false,
                 petition: [],
                 signatures: [],
@@ -255,7 +261,13 @@
                         this.dialogEditPetition = false;
                     })
                     .catch((error) => {
-                        console.log(error.response.statusText);
+                        if (error.response.statusText === 'Bad Request: closingDate must be in the future') {
+                            this.error2 = "Closing date must be in the future";
+                            this.errorFlag2 = true;
+                        } else {
+                            this.error2 = error.response.statusText;
+                            this.errorFlag2 = true;
+                        }
                     });
             },
             signPetition() {
