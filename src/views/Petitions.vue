@@ -34,8 +34,8 @@
                                         dense
                                         outlined
                                 ></v-select>
-                                <v-btn @click="getPetitions()">search</v-btn>
-                                <v-btn @click="clearParams()">reset</v-btn>
+                                <v-btn class="ma-1" @click="getPetitions()">search</v-btn>
+                                <v-btn class="ma-1" @click="clearParams()">reset</v-btn>
                             </v-card>
                         </div>
                     </v-col>

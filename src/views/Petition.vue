@@ -23,9 +23,12 @@
                             <v-card-text>
                                 {{ petition.description }}
                             </v-card-text>
-                            <v-card-text>
-                                {{ petition.signatureCount }}
-                            </v-card-text>
+                        </div>
+
+                        <div>
+                            <v-row justify="center">
+                                {{ petition.signatureCount }} people have signed this petition
+                            </v-row>
                         </div>
                         <!--Signing petition or deleting if they are the creator-->
                         <v-card-actions>
@@ -125,7 +128,6 @@
                                 </div>
                             </v-row>
                         </v-card-actions>
-
                         <!--List of signatures-->
                         <v-list>
                             <v-list-item
@@ -231,7 +233,6 @@
             getCategoryIdByName(categoryName) {
                 let categoryId = -1;
                 for (let i = 0; i < this.categories.length; i++) {
-                    console.log(this.categories[i].name);
                     if (this.categories[i].name === categoryName) {
                         categoryId = this.categories[i].categoryId;
                         break;
@@ -248,7 +249,14 @@
                     const [day, month, year] = this.edit.closingDate.split('-');
                     request.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
                 }
-                apiPetition.updatePetition(this.$route.params.id, request);
+                apiPetition.updatePetition(this.$route.params.id, request)
+                    .then(() => {
+                        this.getPetition();
+                        this.dialogEditPetition = false;
+                    })
+                    .catch((error) => {
+                        console.log(error.response.statusText);
+                    });
             },
             signPetition() {
                 apiPetition.addSignature(this.petition.petitionId)

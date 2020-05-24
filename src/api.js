@@ -27,7 +27,7 @@ export const apiPetition = {
         }
     }),
 
-    updatePetition: (petitionId, data) => instance.patch('/petitions' + petitionId, data, {
+    updatePetition: (petitionId, data) => instance.patch('/petitions/' + petitionId, data, {
         headers: {
             'X-Authorization': localStorage.getItem('authToken')
         }
