@@ -38,7 +38,7 @@
                                         </template>
                                         <v-card>
                                             <v-card-title>
-                                                <span class="headline">Edit Profile</span>
+                                                <span class="headline">Edit Petition</span>
                                             </v-card-title>
                                             <v-card-text>
                                                 <v-container>
@@ -189,13 +189,13 @@
             }
         },
         mounted: function () {
+            this.getCategories();
             this.getPetition();
             this.getSignatures();
-            this.getCategories();
         },
         computed: {
             petitionPhoto: function () {
-                return rootUrl + "petitions/" + this.petition.petitionId + "/photo";
+                return rootUrl + "petitions/" + this.$route.params.id + "/photo";
             },
             alreadySigned: function () {
                 let hasSigned = false;
@@ -220,13 +220,24 @@
                         // Setting values for the edit dialog box
                         this.edit.title = this.petition.title;
                         this.edit.description = this.petition.description;
-                        this.edit.categoryId = this.petition.categoryId;
+                        this.edit.categoryId = this.getCategoryIdByName(this.petition.category);
                         this.edit.closingDate = this.petition.closingDate;
                     })
                     .catch((error) => {
                         this.error = error;
                         this.errorFlag = true;
                     });
+            },
+            getCategoryIdByName(categoryName) {
+                let categoryId = -1;
+                for (let i = 0; i < this.categories.length; i++) {
+                    console.log(this.categories[i].name);
+                    if (this.categories[i].name === categoryName) {
+                        categoryId = this.categories[i].categoryId;
+                        break;
+                    }
+                }
+                return categoryId;
             },
             editPetition() {
                 let request = {};
