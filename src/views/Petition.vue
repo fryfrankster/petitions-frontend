@@ -7,19 +7,38 @@
                         <v-row justify="center">
                             <v-card-title>{{ petition.title }}</v-card-title>
                         </v-row>
-
                         <v-img
                                 max-height="500"
                                 v-bind:src="petitionPhoto"
                         >
                         </v-img>
                         <div class="pa-8">
+                            <v-list-item-avatar color="orange">
+                                <v-img
+                                        v-bind:src="userPhoto(petition.authorId)"
+                                        lazy-src="https://cloud.filmfed.com/default/avatars/l_default_orange.png"
+                                >
+                                </v-img>
+                            </v-list-item-avatar>
+                            <v-card-text>
+                                <b>Author:</b> {{ petition.authorName }}
+                            </v-card-text>
+                            <v-card-text v-if="petition.authorCity">
+                                <b>City:</b> {{ petition.authorCity }}
+                            </v-card-text>
+                            <v-card-text v-if="petition.authorCountry">
+                                <b>Country:</b> {{ petition.authorCountry }}
+                            </v-card-text>
                             <v-card-text>
                                 <b>Category:</b> {{ petition.category }}
                             </v-card-text>
                             <v-card-text>
-                                <b>Created on:</b> {{ petition.createdDate }} | <b>Closing on:</b> {{ petition.closingDate }}
+                                <b>Created on:</b> {{ petition.createdDate }}
                             </v-card-text>
+                            <v-card-text>
+                                <b>Closing on:</b> {{ closingDate }}
+                            </v-card-text>
+
                             <v-card-text>
                                 {{ petition.description }}
                             </v-card-text>
@@ -88,7 +107,7 @@
                                                                     type="file"
                                                                     style="display: none"
                                                                     ref="fileInput"
-                                                                    accept="image/*"
+                                                                    accept="image/jpeg,image/gif,image/png"
                                                                     @change="onFilePicked"
                                                                     required
                                                             >
@@ -146,6 +165,7 @@
                                             <v-list-item-avatar color="orange">
                                                 <v-img
                                                         v-bind:src="userPhoto(signature.signatoryId)"
+                                                        lazy-src="https://cloud.filmfed.com/default/avatars/l_default_orange.png"
                                                 >
                                                 </v-img>
                                             </v-list-item-avatar>
@@ -170,7 +190,7 @@
 </template>
 
 <script>
-    import {apiPetition} from "../api";
+    import {apiPetition, apiUser} from "../api";
 
     const rootUrl = "http://csse-s365.canterbury.ac.nz:4001/api/v1/";
 
@@ -217,6 +237,12 @@
             },
             creator: function () {
                 return this.petition.authorId == localStorage.getItem('userId');
+            },
+            closingDate: function () {
+                if (this.petition.closingDate) {
+                    return this.petition.closingDate
+                }
+                return "No closing date specified"
             }
         },
         methods: {

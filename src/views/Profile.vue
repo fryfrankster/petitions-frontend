@@ -7,9 +7,10 @@
                         <!--Users Details-->
                         <v-card class="pa-7 ma-7">
                             <v-row justify="center">
-                                <v-avatar color="orange" size="150">
+                                <v-avatar size="150">
                                     <v-img
                                             v-bind:src="userPhoto()"
+                                            lazy-src="https://cloud.filmfed.com/default/avatars/l_default_orange.png"
                                     >
                                     </v-img>
                                 </v-avatar>
@@ -100,7 +101,7 @@
                                                                     type="file"
                                                                     style="display: none"
                                                                     ref="fileInput"
-                                                                    accept="image/*"
+                                                                    accept="image/jpeg,image/gif,image/png"
                                                                     @change="onFilePicked"
                                                             >
                                                             <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
@@ -199,7 +200,7 @@
                                                                 type="file"
                                                                 style="display: none"
                                                                 ref="fileInput"
-                                                                accept="image/*"
+                                                                accept="image/jpeg,image/gif,image/png"
                                                                 @change="onFilePicked"
                                                         >
                                                         <v-img v-bind:src="imageUrl" height="150"></v-img>

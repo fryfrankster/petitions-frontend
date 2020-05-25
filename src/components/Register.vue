@@ -66,7 +66,7 @@
                                 type="file"
                                 style="display: none"
                                 ref="fileInput"
-                                accept="image/*"
+                                accept="image/jpeg,image/gif,image/png"
                                 @change="onFilePicked"
                         >
                         <v-img v-bind:src="imageUrl" height="150"></v-img>
