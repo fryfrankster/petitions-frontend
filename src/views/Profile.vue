@@ -95,8 +95,8 @@
                                                         </v-col>
 
                                                         <v-col cols="12">
-                                                            <!--Uploading an image for petition-->
-                                                            <v-btn @click="onPickFile">Change image</v-btn>
+                                                            <!--Uploading an image for user-->
+                                                            <v-btn @click="onPickFile('user')">Change image</v-btn>
                                                             <input
                                                                     type="file"
                                                                     style="display: none"
@@ -195,7 +195,7 @@
 
                                                     <v-col cols="12">
                                                         <!--Uploading an image for petition-->
-                                                        <v-btn @click="onPickFile">Upload image</v-btn>
+                                                        <v-btn @click="onPickFile('petition')">Upload image</v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"
@@ -203,7 +203,7 @@
                                                                 accept="image/jpeg,image/gif,image/png"
                                                                 @change="onFilePicked"
                                                         >
-                                                        <v-img v-bind:src="imageUrl" height="150"></v-img>
+                                                        <v-img v-bind:src="petitionImageUrl" height="150"></v-img>
                                                     </v-col>
                                                 </v-row>
                                             </v-container>
@@ -294,6 +294,8 @@
                 categories: [],
                 image: null,
                 imageUrl: '',
+                petitionImage: null,
+                petitionImageUrl: '',
                 edit: {
                     name: '',
                     email: '',
@@ -407,10 +409,12 @@
                     const [day, month, year] = this.form.closingDate.split('-');
                     formRequest.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
                 }
+
+
                 apiPetition.createPetition(formRequest)
                     .then((response) => {
-                        if (this.image !== null) {
-                            this.setPetitionPhoto(response.data.petitionId, this.image);
+                        if (this.petitionImage !== null) {
+                            this.setPetitionPhoto(response.data.petitionId, this.petitionImage);
                         }
                         this.signPetition(response.data.petitionId);
                         this.dialog = false;
@@ -437,7 +441,7 @@
             onPickFile() {
                 this.$refs.fileInput.click();
             },
-            onFilePicked(event) {
+            onFilePicked(event, type) {
                 const files = event.target.files;
                 let filename = files[0].name;
                 if (filename.lastIndexOf('.') <= 0) {
@@ -445,10 +449,19 @@
                 }
                 const fileReader = new FileReader();
                 fileReader.addEventListener('load', () => {
-                    this.imageUrl = fileReader.result;
+                    if (type === 'petition') {
+                        this.imageUrl = fileReader.result;
+                    } else {
+                        this.petitionImageUrl = fileReader.result;
+                    }
                 });
                 fileReader.readAsDataURL(files[0]);
-                this.image = files[0];
+
+                if (type === 'petition') {
+                    this.image = files[0];
+                } else {
+                    this.petitionImage = files[0];
+                }
             },
             editProfile() {
                 let editRequest = {};
