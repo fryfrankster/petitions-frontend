@@ -61,7 +61,6 @@
                                                 </v-list-item-subtitle>
                                             </v-list-item-content>
                                         </v-list-item>
-
                                         <v-img
                                                 v-bind:src="petitionPhoto(petition.petitionId)"
                                                 @click="viewPetition(petition.petitionId)"

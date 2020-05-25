@@ -43,6 +43,11 @@
                                 {{ petition.description }}
                             </v-card-text>
                         </div>
+                        <div>
+                            <v-row>
+                                <a :href="twitterURL" >Twitter</a>
+                            </v-row>
+                        </div>
 
                         <div>
                             <v-row justify="center">
@@ -52,7 +57,6 @@
                         <!--Signing petition or deleting if they are the creator-->
                         <v-card-actions>
                             <v-row justify="center">
-
                                 <div v-if="creator">
                                     <v-dialog v-model="dialogEditPetition" persistent max-width="600px">
                                         <template v-slot:activator="{ on }">
@@ -120,7 +124,9 @@
                                             <!--Save and close-->
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
-                                                <v-btn color="blue darken-1" text @click="dialogEditPetition = false">Close</v-btn>
+                                                <v-btn color="blue darken-1" text @click="dialogEditPetition = false">
+                                                    Close
+                                                </v-btn>
                                                 <v-btn color="blue darken-1" text v-on:click="editPetition">Save</v-btn>
                                             </v-card-actions>
                                         </v-card>
@@ -134,7 +140,6 @@
                                         Delete Petition
                                     </v-btn>
                                 </div>
-
                                 <div v-else>
                                     <div v-if="alreadySigned">
                                         <v-btn v-on:click="unSignPetition"
@@ -213,7 +218,9 @@
                     description: '',
                     categoryId: '',
                     closingDate: '',
-                }
+                },
+                twitterURL: "https://twitter.com/intent/tweet?text=Check out this Petition:" +
+                    "&hashtags=petition&url=" + "http://localhost:8080/petitions/" + this.$route.params.id,
             }
         },
         mounted: function () {

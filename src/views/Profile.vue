@@ -43,70 +43,70 @@
                                         <v-card-text>
                                             <v-container>
                                                 <v-row>
-<!--                                                    <v-form @submit.prevent="editProfile">-->
-                                                        <v-col cols="12">
-                                                            <v-text-field
-                                                                    v-model="edit.name"
-                                                                    label="Name"
-                                                                    :error-messages="nameErrors"
-                                                                    @input="$v.edit.name.$touch()"
-                                                                    @blur="$v.edit.name.$touch()"
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12">
-                                                            <v-text-field
-                                                                    v-model="edit.email"
-                                                                    label="Email"
-                                                                    type="email"
-                                                                    :error-messages="emailErrors"
-                                                                    @input="$v.edit.email.$touch()"
-                                                                    @blur="$v.edit.email.$touch()"
-                                                            ></v-text-field>
-                                                        </v-col>
+                                                    <!--                                                    <v-form @submit.prevent="editProfile">-->
+                                                    <v-col cols="12">
+                                                        <v-text-field
+                                                                v-model="edit.name"
+                                                                label="Name"
+                                                                :error-messages="nameErrors"
+                                                                @input="$v.edit.name.$touch()"
+                                                                @blur="$v.edit.name.$touch()"
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                    <v-col cols="12">
+                                                        <v-text-field
+                                                                v-model="edit.email"
+                                                                label="Email"
+                                                                type="email"
+                                                                :error-messages="emailErrors"
+                                                                @input="$v.edit.email.$touch()"
+                                                                @blur="$v.edit.email.$touch()"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                                        <v-col cols="12" sm="6">
-                                                            <v-text-field
-                                                                    v-model="edit.city"
-                                                                    label="City"
-                                                            ></v-text-field>
-                                                        </v-col>
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.city"
+                                                                label="City"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                                        <v-col cols="12" sm="6">
-                                                            <v-text-field
-                                                                    v-model="edit.country"
-                                                                    label="Country"
-                                                            ></v-text-field>
-                                                        </v-col>
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.country"
+                                                                label="Country"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                                        <v-col cols="12" sm="6">
-                                                            <v-text-field
-                                                                    v-model="edit.currentPassword"
-                                                                    label="Current Password"
-                                                                    type="password"
-                                                            ></v-text-field>
-                                                        </v-col>
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.currentPassword"
+                                                                label="Current Password"
+                                                                type="password"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                                        <v-col cols="12" sm="6">
-                                                            <v-text-field
-                                                                    v-model="edit.password"
-                                                                    label="New Password"
-                                                                    type="password"
-                                                            ></v-text-field>
-                                                        </v-col>
+                                                    <v-col cols="12" sm="6">
+                                                        <v-text-field
+                                                                v-model="edit.password"
+                                                                label="New Password"
+                                                                type="password"
+                                                        ></v-text-field>
+                                                    </v-col>
 
-                                                        <v-col cols="12">
-                                                            <!--Uploading an image for user-->
-                                                            <v-btn @click="onPickFile('user')">Change image</v-btn>
-                                                            <input
-                                                                    type="file"
-                                                                    style="display: none"
-                                                                    ref="fileInput"
-                                                                    accept="image/jpeg,image/gif,image/png"
-                                                                    @change="onFilePicked"
-                                                            >
-                                                            <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
-                                                        </v-col>
-<!--                                                    </v-form>-->
+                                                    <v-col cols="12">
+                                                        <!--Uploading an image for user-->
+                                                        <v-btn @click="onPickFile('user')">Change image</v-btn>
+                                                        <input
+                                                                type="file"
+                                                                style="display: none"
+                                                                ref="fileInput"
+                                                                accept="image/jpeg,image/gif,image/png"
+                                                                @change="onFilePicked"
+                                                        >
+                                                        <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
+                                                    </v-col>
+                                                    <!--                                                    </v-form>-->
                                                 </v-row>
                                             </v-container>
                                         </v-card-text>
@@ -118,7 +118,7 @@
                                             </v-btn>
                                             <v-btn color="blue darken-1"
                                                    text
-                                                   :disabled="this.$v.edit.name.$invalid || this.$v.edit.email.$invalid "
+                                                   :disabled="this.$v.edit.name.$invalid || this.$v.edit.email.$invalid"
                                                    v-on:click="editProfile"
                                                    type="submit"
                                             >Save
@@ -171,6 +171,9 @@
                                                                 v-model="form.description"
                                                                 label="Description*"
                                                                 required
+                                                                :error-messages="descriptionErrors"
+                                                                @input="$v.form.description.$touch()"
+                                                                @blur="$v.form.description.$touch()"
                                                         ></v-text-field>
                                                     </v-col>
 
@@ -182,6 +185,9 @@
                                                                 item-value="categoryId"
                                                                 label="Category*"
                                                                 required
+                                                                :error-messages="categoryErrors"
+                                                                @input="$v.form.categoryId.$touch()"
+                                                                @blur="$v.form.categoryId.$touch()"
                                                         ></v-select>
                                                     </v-col>
 
@@ -195,13 +201,20 @@
 
                                                     <v-col cols="12">
                                                         <!--Uploading an image for petition-->
-                                                        <v-btn @click="onPickFile('petition')">Upload image</v-btn>
+                                                        <div v-if="!this.petitionImageUrl">
+                                                            Please upload an image for this petition
+                                                        </div>
+                                                        <v-btn @click="onPickFile('petition')">Upload image*</v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"
                                                                 ref="fileInput"
                                                                 accept="image/jpeg,image/gif,image/png"
                                                                 @change="onFilePicked"
+                                                                required
+                                                                :error-messages="petitionImageErrors"
+                                                                @close="$v.petitionImageUrl.$touch()"
+                                                                @blur="$v.petitionImageUrl.$touch()"
                                                         >
                                                         <v-img v-bind:src="petitionImageUrl" height="150"></v-img>
                                                     </v-col>
@@ -215,9 +228,10 @@
                                             <v-spacer></v-spacer>
                                             <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
                                             <v-btn color="blue darken-1" text
-                                                   :disabled="this.$v.$invalid"
+                                                   :disabled="this.$v.form.title.$invalid || this.$v.form.description.$invalid || this.$v.form.categoryId.$invalid || this.$v.petitionImageUrl.$invalid"
                                                    v-on:click="newPetition"
-                                            >Save</v-btn>
+                                            >Save
+                                            </v-btn>
                                         </v-card-actions>
                                     </v-card>
                                 </v-dialog>
@@ -276,8 +290,11 @@
                 email: {required, email}
             },
             form: {
-                title: {required, minLength: minLength(1)}
-            }
+                title: {required, minLength: minLength(1)},
+                description: {required, minLength: minLength(1)},
+                categoryId: {required}
+            },
+            petitionImageUrl: {required}
         },
         data() {
             return {
@@ -334,9 +351,28 @@
             },
             titleErrors() {
                 const errors = [];
-                if (!this.$v.edit.name.$dirty) return errors;
-                !this.$v.edit.name.minLength && errors.push('Name must be at least 1 characters long');
-                !this.$v.edit.name.required && errors.push('Name is required.');
+                if (!this.$v.form.title.$dirty) return errors;
+                !this.$v.form.title.minLength && errors.push('Title must be at least 1 character long');
+                !this.$v.form.title.required && errors.push('Title is required.');
+                return errors
+            },
+            descriptionErrors() {
+                const errors = [];
+                if (!this.$v.form.description.$dirty) return errors;
+                !this.$v.form.description.minLength && errors.push('Description must be at least 1 character long');
+                !this.$v.form.description.required && errors.push('Description is required.');
+                return errors
+            },
+            categoryErrors() {
+                const errors = [];
+                if (!this.$v.form.categoryId.$dirty) return errors;
+                !this.$v.form.categoryId.required && errors.push('Category is required.');
+                return errors
+            },
+            petitionImageErrors() {
+                const errors = [];
+                if (!this.$v.petitionImageUrl.$dirty) return errors;
+                !this.$v.petitionImageUrl.required && errors.push('Image is required.');
                 return errors
             },
         },
@@ -383,10 +419,12 @@
                     });
             },
             clearPetitionForm() {
-                this.edit.title = '';
-                this.edit.description = '';
-                this.edit.categoryId = '';
-                this.edit.closingDate = '';
+                this.form.title = '';
+                this.form.description = '';
+                this.form.categoryId = '';
+                this.form.closingDate = '';
+                this.petitionImage = null;
+                this.petitionImageUrl = '';
             },
             signPetition(petitionId) {
                 apiPetition.addSignature(petitionId)
@@ -409,8 +447,6 @@
                     const [day, month, year] = this.form.closingDate.split('-');
                     formRequest.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
                 }
-
-
                 apiPetition.createPetition(formRequest)
                     .then((response) => {
                         if (this.petitionImage !== null) {
@@ -420,14 +456,17 @@
                         this.dialog = false;
                         this.clearPetitionForm();
                     }).catch((error) => {
-                    console.log(error);
-                    if (error.response.statusText === 'Bad Request: closingDate must be in the future') {
-                        this.error2 = "Closing date must be in the future";
-                        this.errorFlag2 = true;
-                    } else {
-                        this.error2 = error.response.statusText;
-                        this.errorFlag2 = true;
-                    }
+                        console.log(error);
+                        if (error.response.statusText === 'Bad Request: closingDate must be in the future') {
+                            this.error2 = "Closing date must be in the future";
+                            this.errorFlag2 = true;
+                        } else if (error.response.statusText === 'Bad Request: data.categoryId should be integer') {
+                            this.error2 = "Please enter a valid category";
+                            this.errorFlag2 = true;
+                        } else {
+                            this.error2 = error.response.statusText;
+                            this.errorFlag2 = true;
+                        }
                 });
                 this.getPetitions();
             },
@@ -456,7 +495,6 @@
                     }
                 });
                 fileReader.readAsDataURL(files[0]);
-
                 if (type === 'petition') {
                     this.image = files[0];
                 } else {
