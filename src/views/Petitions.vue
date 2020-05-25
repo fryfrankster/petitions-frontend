@@ -174,14 +174,18 @@
                     });
             },
             signPetition(petitionId) {
-                apiPetition.signPetition(petitionId)
-                    .then(() => {
-                        this.getPetitions();
-                    })
-                    .catch((error) => {
-                        this.error = error;
-                        this.errorFlag = true;
-                    })
+                if (!this.$store.state.isLoggedIn) {
+                    this.$router.push({path: '/Register'});
+                } else {
+                    apiPetition.signPetition(petitionId)
+                        .then(() => {
+                            this.getPetitions();
+                        })
+                        .catch((error) => {
+                            this.error = error;
+                            this.errorFlag = true;
+                        })
+                }
             },
         }
     }

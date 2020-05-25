@@ -190,7 +190,7 @@
 </template>
 
 <script>
-    import {apiPetition, apiUser} from "../api";
+    import {apiPetition} from "../api";
 
     const rootUrl = "http://csse-s365.canterbury.ac.nz:4001/api/v1/";
 
