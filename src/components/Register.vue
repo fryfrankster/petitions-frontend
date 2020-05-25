@@ -3,7 +3,10 @@
         <v-container>
             <v-layout>
                 <v-flex>
-                    <form>
+                    <form @submit.prevent="submit">
+                        <div v-if="errorFlag" style="color: red;">
+                            {{ error }}
+                        </div>
                         <v-text-field
                                 v-model="registrationData.name"
                                 :error-messages="nameErrors"
@@ -68,7 +71,7 @@
                         >
                         <v-img v-bind:src="imageUrl" height="150"></v-img>
 
-                        <v-btn class="mr-4" @click="submit">submit</v-btn>
+                        <v-btn class="mr-4" :disabled="this.$v.$invalid" type="submit">submit</v-btn>
                         <v-btn @click="clear">clear</v-btn>
                     </form>
                 </v-flex>
@@ -95,6 +98,7 @@
         },
 
         data: () => ({
+            registrationForm: false,
             error: '',
             errorFlag: '',
             imageUrl: '',
@@ -134,7 +138,6 @@
 
         methods: {
             ...mapActions(["loginUser"]),
-
             submit() {
                 let registrationRequest = {
                     name: this.registrationData.name,
@@ -149,7 +152,13 @@
                     .then(() => {
                         this.autoLogin();
                     }).catch((error) => {
-                    console.log(error);
+                        if (error.response.statusText === "Bad Request: email already in use") {
+                            this.error = "This email is already in use"
+
+                        } else {
+                            this.error = error.response.statusText;
+                        }
+                    this.errorFlag = true;
                 });
             },
             autoLogin() {
@@ -157,7 +166,9 @@
                     .then((response) => {
                         localStorage.setItem('userId', response.data.userId);
                         localStorage.setItem('authToken', response.data.token);
-                        this.setUserPhoto(response.data.userId, this.image);
+                        if (this.image != null) {
+                            this.setUserPhoto(response.data.userId, this.image);
+                        }
                         this.loginUser(response.data);
                         this.$router.push('Petitions');
                     }).catch((error) => {
