@@ -97,6 +97,7 @@
                                                     <v-col cols="12">
                                                         <!--Uploading an image for user-->
                                                         <v-btn @click="onPickFile('user')">Change image</v-btn>
+                                                        <v-btn color="red white--text" @click="this.imageUrl = ''">Delete image</v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"

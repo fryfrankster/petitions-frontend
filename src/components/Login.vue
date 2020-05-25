@@ -31,7 +31,11 @@
                                     rounded
                                     dense
                             ></v-text-field>
-                            <v-btn rounded dense class="mr-4" @click.prevent="submit">Login</v-btn>
+                            <v-btn rounded dense class="mr-4"
+                                   :disabled="this.$v.email.$invalid || this.$v.password.$invalid"
+                                   type="submit"
+                                   v-on:click.prevent="submit"
+                            >Login</v-btn>
                         </form>
                     </v-card>
                 </v-flex>
@@ -76,9 +80,6 @@
                 !this.$v.password.minLength && errors.push('Password must be at least 6 characters long');
                 !this.$v.password.required && errors.push('Password is required.');
                 return errors;
-            },
-            areValid() {
-                return false;
             },
         },
 

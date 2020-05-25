@@ -4,8 +4,22 @@
             <v-layout>
                 <v-flex xs8 offset-xs2>
                     <v-card>
-                        <v-row justify="center">
-                            <v-card-title>{{ petition.title }}</v-card-title>
+                        <v-row justify="center" class="mx-1">
+<!--                            <v-card-title>{{ petition.title }}</v-card-title>-->
+                            <v-list-item>
+                                <v-list-item-avatar color="orange">-->
+                                    <v-img
+                                            v-bind:src="userPhoto(petition.authorId)"
+                                            lazy-src="https://cloud.filmfed.com/default/avatars/l_default_orange.png"
+                                    >
+                                    </v-img>
+                                </v-list-item-avatar>
+                                <v-list-item-content>
+                                    <v-list-item-title class="headline">{{ petition.title }}</v-list-item-title>
+                                    <v-list-item-subtitle>by {{ petition.authorName }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                            </v-list-item>
+
                         </v-row>
                         <v-img
                                 max-height="500"
@@ -13,16 +27,6 @@
                         >
                         </v-img>
                         <div class="pa-8">
-                            <v-list-item-avatar color="orange">
-                                <v-img
-                                        v-bind:src="userPhoto(petition.authorId)"
-                                        lazy-src="https://cloud.filmfed.com/default/avatars/l_default_orange.png"
-                                >
-                                </v-img>
-                            </v-list-item-avatar>
-                            <v-card-text>
-                                <b>Author:</b> {{ petition.authorName }}
-                            </v-card-text>
                             <v-card-text v-if="petition.authorCity">
                                 <b>City:</b> {{ petition.authorCity }}
                             </v-card-text>
@@ -44,10 +48,17 @@
                         </div>
                         <div>
                             <v-row>
-                                <a :href="twitterURL" target="_blank">Twitter</a>
+                                <a :href="twitterURL" target="_blank">
+                                    <v-icon>
+
+                                    </v-icon>
+                                </a>
                             </v-row>
                             <v-row>
                                 <a :href="'mailto:' + emailUrl" target="_blank">Email</a>
+                            </v-row>
+                            <v-row>
+                                <a :href="redditUrl" target="_blank">Reddit</a>
                             </v-row>
                         </div>
 
@@ -225,6 +236,7 @@
                 twitterURL: "https://twitter.com/intent/tweet?text=Check out this Petition:" +
                     "&hashtags=petition&url=" + "http://localhost:8080/petitions/" + this.$route.params.id,
                 emailUrl: "?body=Check out this Petition " + window.location.href,
+                redditUrl: " http://www.reddit.com/submit?url=Check out this petition! " + window.location.href,
             }
         },
         mounted: function () {
