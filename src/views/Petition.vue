@@ -38,14 +38,16 @@
                             <v-card-text>
                                 <b>Closing on:</b> {{ closingDate }}
                             </v-card-text>
-
                             <v-card-text>
                                 {{ petition.description }}
                             </v-card-text>
                         </div>
                         <div>
                             <v-row>
-                                <a :href="twitterURL" >Twitter</a>
+                                <a :href="twitterURL" target="_blank">Twitter</a>
+                            </v-row>
+                            <v-row>
+                                <a :href="'mailto:' + emailUrl" target="_blank">Email</a>
                             </v-row>
                         </div>
 
@@ -100,7 +102,8 @@
                                                             <v-text-field
                                                                     v-model="edit.closingDate"
                                                                     label="Closing Date"
-                                                                    hint="DD-MM-YYYY format"
+                                                                    hint="DD/MM/YYYY format"
+                                                                    type="date"
                                                             ></v-text-field>
                                                         </v-col>
 
@@ -221,6 +224,7 @@
                 },
                 twitterURL: "https://twitter.com/intent/tweet?text=Check out this Petition:" +
                     "&hashtags=petition&url=" + "http://localhost:8080/petitions/" + this.$route.params.id,
+                emailUrl: "?body=Check out this Petition " + window.location.href,
             }
         },
         mounted: function () {
@@ -285,7 +289,7 @@
                 if (this.edit.description) request.description = this.edit.description;
                 if (this.edit.categoryId) request.categoryId = this.edit.categoryId;
                 if (this.edit.closingDate) {
-                    const [day, month, year] = this.edit.closingDate.split('-');
+                    const [year, month, day] = this.form.closingDate.split('-');
                     request.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
                 }
                 apiPetition.updatePetition(this.$route.params.id, request)
@@ -373,6 +377,8 @@
                 fileReader.readAsDataURL(files[0]);
                 this.image = files[0];
             },
+            deleteUserPhoto() {
+            }
         }
     }
 </script>

@@ -195,15 +195,13 @@
                                                         <v-text-field
                                                                 v-model="form.closingDate"
                                                                 label="Closing Date"
-                                                                hint="DD-MM-YYYY format"
+                                                                hint="DD/MM/YYYY format"
+                                                                type="date"
                                                         ></v-text-field>
                                                     </v-col>
 
                                                     <v-col cols="12">
                                                         <!--Uploading an image for petition-->
-                                                        <div v-if="!this.petitionImageUrl">
-                                                            Please upload an image for this petition
-                                                        </div>
                                                         <v-btn @click="onPickFile('petition')">Upload image*</v-btn>
                                                         <input
                                                                 type="file"
@@ -216,6 +214,9 @@
                                                                 @close="$v.petitionImageUrl.$touch()"
                                                                 @blur="$v.petitionImageUrl.$touch()"
                                                         >
+                                                        <div v-if="!this.petitionImageUrl">
+                                                            <small>Please upload an image for this petition</small>
+                                                        </div>
                                                         <v-img v-bind:src="petitionImageUrl" height="150"></v-img>
                                                     </v-col>
                                                 </v-row>
@@ -444,7 +445,7 @@
                     categoryId: this.form.categoryId
                 };
                 if (this.form.closingDate) {
-                    const [day, month, year] = this.form.closingDate.split('-');
+                    const [year, month, day] = this.form.closingDate.split('-');
                     formRequest.closingDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
                 }
                 apiPetition.createPetition(formRequest)

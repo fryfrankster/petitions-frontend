@@ -102,8 +102,6 @@ export const apiUser = {
         }
     }),
 
-    // getPhoto: (userId) => instance.get("/users/" + userId + "/photo"),
-
     deletePhoto: (userId) => instance.delete('/users/' + userId + '/photo', {
         headers: {
             'X-Authorization': localStorage.getItem('authToken')
