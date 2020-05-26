@@ -5,7 +5,6 @@
                 <v-flex xs8 offset-xs2>
                     <v-card>
                         <v-row justify="center" class="mx-1">
-<!--                            <v-card-title>{{ petition.title }}</v-card-title>-->
                             <v-list-item>
                                 <v-list-item-avatar color="orange">-->
                                     <v-img
@@ -46,19 +45,20 @@
                                 {{ petition.description }}
                             </v-card-text>
                         </div>
-                        <div>
-                            <v-row>
-                                <a :href="twitterURL" target="_blank">
-                                    <v-icon>
-
-                                    </v-icon>
+                        <div class="ma-5">
+                            <v-row justify="center">
+                                <b>SHARE THIS PETITION TO OTHERS</b>
+                            </v-row>
+                            <v-row justify="center">
+                                <a :href="'mailto:' + emailUrl" target="_blank" class="ma-1" style="text-decoration:none">
+                                    <v-btn>Email</v-btn>
                                 </a>
-                            </v-row>
-                            <v-row>
-                                <a :href="'mailto:' + emailUrl" target="_blank">Email</a>
-                            </v-row>
-                            <v-row>
-                                <a :href="redditUrl" target="_blank">Reddit</a>
+                                <a :href="twitterURL" target="_blank" class="ma-1" style="text-decoration:none">
+                                    <v-btn color="blue white--text">Twitter</v-btn>
+                                </a>
+                                <a :href="redditUrl" target="_blank" class="ma-1" style="text-decoration:none">
+                                    <v-btn color="red white--text">Reddit</v-btn>
+                                </a>
                             </v-row>
                         </div>
 
