@@ -95,14 +95,16 @@
 
                                                     <v-col cols="12">
                                                         <!--Uploading an image for user-->
-                                                        <v-btn class="ma-1" @click="onPickFile('user')">Change image</v-btn>
-                                                        <v-btn class="ma-1" color="red white--text" @click="imageUrl = ''">Delete image</v-btn>
+                                                        <v-btn class="ma-1" @click="onPickFileUser">Change image</v-btn>
+                                                        <v-btn class="ma-1" color="red white--text"
+                                                               @click="imageUrl = ''">Delete image
+                                                        </v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"
                                                                 ref="fileInput"
                                                                 accept="image/jpeg,image/gif,image/png"
-                                                                @change="onFilePicked"
+                                                                @change="onFilePickedUser"
                                                         >
                                                         <v-img v-bind:src="imageUrl" height="70" width="90"></v-img>
                                                     </v-col>
@@ -202,13 +204,13 @@
 
                                                     <v-col cols="12">
                                                         <!--Uploading an image for petition-->
-                                                        <v-btn @click="onPickFile('petition')">Upload image*</v-btn>
+                                                        <v-btn @click="onPickFilePetition">Upload image*</v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"
-                                                                ref="fileInput"
+                                                                ref="fileInput2"
                                                                 accept="image/jpeg,image/gif,image/png"
-                                                                @change="onFilePicked"
+                                                                @change="onFilePickedPetition"
                                                                 required
                                                                 :error-messages="petitionImageErrors"
                                                                 @close="$v.petitionImageUrl.$touch()"
@@ -229,7 +231,8 @@
                                             <v-spacer></v-spacer>
                                             <v-btn color="blue darken-1"
                                                    text @click="dialog = false"
-                                            >Close</v-btn>
+                                            >Close
+                                            </v-btn>
                                             <v-btn color="blue darken-1"
                                                    text
                                                    :disabled="this.$v.form.title.$invalid || this.$v.form.description.$invalid || this.$v.form.categoryId.$invalid || this.$v.petitionImageUrl.$invalid"
@@ -460,17 +463,17 @@
                         this.dialog = false;
                         this.clearPetitionForm();
                     }).catch((error) => {
-                        console.log(error);
-                        if (error.response.statusText === 'Bad Request: closingDate must be in the future') {
-                            this.error2 = "Closing date must be in the future";
-                            this.errorFlag2 = true;
-                        } else if (error.response.statusText === 'Bad Request: data.categoryId should be integer') {
-                            this.error2 = "Please enter a valid category";
-                            this.errorFlag2 = true;
-                        } else {
-                            this.error2 = error.response.statusText;
-                            this.errorFlag2 = true;
-                        }
+                    console.log(error);
+                    if (error.response.statusText === 'Bad Request: closingDate must be in the future') {
+                        this.error2 = "Closing date must be in the future";
+                        this.errorFlag2 = true;
+                    } else if (error.response.statusText === 'Bad Request: data.categoryId should be integer') {
+                        this.error2 = "Please enter a valid category";
+                        this.errorFlag2 = true;
+                    } else {
+                        this.error2 = error.response.statusText;
+                        this.errorFlag2 = true;
+                    }
                 });
                 this.getPetitions();
             },
@@ -488,10 +491,10 @@
                     }
                 );
             },
-            onPickFile() {
+            onPickFileUser() {
                 this.$refs.fileInput.click();
             },
-            onFilePicked(event, type) {
+            onFilePickedUser(event) {
                 const files = event.target.files;
                 let filename = files[0].name;
                 if (filename.lastIndexOf('.') <= 0) {
@@ -499,18 +502,26 @@
                 }
                 const fileReader = new FileReader();
                 fileReader.addEventListener('load', () => {
-                    if (type === 'petition') {
-                        this.petitionImageUrl = fileReader.result;
-                    } else {
-                        this.imageUrl = fileReader.result;
-                    }
+                    this.imageUrl = fileReader.result;
                 });
                 fileReader.readAsDataURL(files[0]);
-                if (type === 'petition') {
-                    this.petitionImage = files[0];
-                } else {
-                    this.image = files[0];
+                this.image = files[0];
+            },
+            onPickFilePetition() {
+                this.$refs.fileInput2.click();
+            },
+            onFilePickedPetition(event) {
+                const files = event.target.files;
+                let filename = files[0].name;
+                if (filename.lastIndexOf('.') <= 0) {
+                    return alert('Please add a valid file');
                 }
+                const fileReader = new FileReader();
+                fileReader.addEventListener('load', () => {
+                    this.petitionImageUrl = fileReader.result;
+                });
+                fileReader.readAsDataURL(files[0]);
+                this.petitionImage = files[0];
             },
             deleteUserPhoto(userId) {
                 apiUser.deletePhoto(userId)
