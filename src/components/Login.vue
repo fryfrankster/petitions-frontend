@@ -2,9 +2,12 @@
     <div class="login">
         <v-container class="login-container">
             <v-layout>
-                <v-flex>
-                    <v-card flat max-width="500">
+                <v-row justify="center">
+                    <v-col cols="4">
                         <form>
+                            <v-row justify="center">
+                                <h2>Login</h2>
+                            </v-row>
                             <div v-if="errorFlag" style="color: red;">
                                 {{ error }}
                             </div>
@@ -31,14 +34,17 @@
                                     rounded
                                     dense
                             ></v-text-field>
-                            <v-btn rounded dense class="mr-4"
-                                   :disabled="this.$v.email.$invalid || this.$v.password.$invalid"
-                                   type="submit"
-                                   v-on:click.prevent="submit"
-                            >Login</v-btn>
+                            <v-row justify="center">
+                                <v-btn rounded dense class="mr-4"
+                                       :disabled="this.$v.email.$invalid || this.$v.password.$invalid"
+                                       type="submit"
+                                       v-on:click.prevent="submit"
+                                >Login
+                                </v-btn>
+                            </v-row>
                         </form>
-                    </v-card>
-                </v-flex>
+                    </v-col>
+                </v-row>
             </v-layout>
         </v-container>
     </div>

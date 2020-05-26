@@ -2,79 +2,90 @@
     <div class="register">
         <v-container>
             <v-layout>
-                <v-flex>
-                    <form @submit.prevent="submit">
-                        <div v-if="errorFlag" style="color: red;">
-                            {{ error }}
-                        </div>
-                        <v-text-field
-                                v-model="registrationData.name"
-                                :error-messages="nameErrors"
-                                label="Name"
-                                required
-                                @input="$v.registrationData.name.$touch()"
-                                @blur="$v.registrationData.name.$touch()"
-                                filled
-                                rounded
-                                dense
-                        ></v-text-field>
-                        <v-text-field
-                                v-model="registrationData.email"
-                                :error-messages="emailErrors"
-                                label="Email"
-                                required
-                                @input="$v.registrationData.email.$touch()"
-                                @blur="$v.registrationData.email.$touch()"
-                                filled
-                                rounded
-                                dense
-                        ></v-text-field>
-                        <v-text-field
-                                v-model="registrationData.password"
-                                :error-messages="passwordErrors"
-                                type="password"
-                                label="Password"
-                                required
-                                @input="$v.registrationData.password.$touch()"
-                                @blur="$v.registrationData.password.$touch()"
-                                filled
-                                rounded
-                                dense
-                        ></v-text-field>
-                        <v-text-field
-                                v-model="registrationData.city"
-                                label="City"
-                                @input="$v.registrationData.city.$touch()"
-                                @blur="$v.registrationData.city.$touch()"
-                                filled
-                                rounded
-                                dense
-                        ></v-text-field>
-                        <v-text-field
-                                v-model="registrationData.country"
-                                label="Country"
-                                @input="$v.registrationData.country.$touch()"
-                                @blur="$v.registrationData.country.$touch()"
-                                filled
-                                rounded
-                                dense
-                        ></v-text-field>
+                <v-row justify="center">
+                    <v-col cols="8">
+                        <form @submit.prevent="submit">
+                            <div>
+                                <v-row justify="center">
+                                    <h2>Register</h2>
+                                </v-row>
+                                <v-row justify="center">
+                                    <p>Start signing now</p>
+                                </v-row>
+                            </div>
+                            <div v-if="errorFlag" style="color: red;">
+                                {{ error }}
+                            </div>
+                            <v-text-field
+                                    v-model="registrationData.name"
+                                    :error-messages="nameErrors"
+                                    label="Name"
+                                    required
+                                    @input="$v.registrationData.name.$touch()"
+                                    @blur="$v.registrationData.name.$touch()"
+                                    filled
+                                    rounded
+                                    dense
+                            ></v-text-field>
+                            <v-text-field
+                                    v-model="registrationData.email"
+                                    :error-messages="emailErrors"
+                                    label="Email"
+                                    required
+                                    @input="$v.registrationData.email.$touch()"
+                                    @blur="$v.registrationData.email.$touch()"
+                                    filled
+                                    rounded
+                                    dense
+                            ></v-text-field>
+                            <v-text-field
+                                    v-model="registrationData.password"
+                                    :error-messages="passwordErrors"
+                                    type="password"
+                                    label="Password"
+                                    required
+                                    @input="$v.registrationData.password.$touch()"
+                                    @blur="$v.registrationData.password.$touch()"
+                                    filled
+                                    rounded
+                                    dense
+                            ></v-text-field>
+                            <v-text-field
+                                    v-model="registrationData.city"
+                                    label="City"
+                                    @input="$v.registrationData.city.$touch()"
+                                    @blur="$v.registrationData.city.$touch()"
+                                    filled
+                                    rounded
+                                    dense
+                            ></v-text-field>
+                            <v-text-field
+                                    v-model="registrationData.country"
+                                    label="Country"
+                                    @input="$v.registrationData.country.$touch()"
+                                    @blur="$v.registrationData.country.$touch()"
+                                    filled
+                                    rounded
+                                    dense
+                            ></v-text-field>
 
-<!--                        Uploading an image for user-->
-                        <v-btn @click="onPickFile">Upload image</v-btn>
-                        <input
-                                type="file"
-                                style="display: none"
-                                ref="fileInput"
-                                accept="image/jpeg,image/gif,image/png"
-                                @change="onFilePicked"
-                        >
-                        <v-img v-bind:src="imageUrl" height="150"></v-img>
-
-                        <v-btn class="mr-4" :disabled="this.$v.$invalid" type="submit">submit</v-btn>
-                        <v-btn @click="clear">clear</v-btn>
-                    </form>
-                </v-flex>
+                            <!--Uploading an image for user-->
+                            <v-btn @click="onPickFile">Upload image</v-btn>
+                            <input
+                                    type="file"
+                                    style="display: none"
+                                    ref="fileInput"
+                                    accept="image/jpeg,image/gif,image/png"
+                                    @change="onFilePicked"
+                            >
+                            <v-img v-bind:src="imageUrl" height="150"></v-img>
+                            <v-row justify="center">
+                                <v-btn class="mr-4" :disabled="this.$v.$invalid" type="submit">register</v-btn>
+                                <v-btn @click="clear">clear</v-btn>
+                            </v-row>
+                        </form>
+                    </v-col>
+                </v-row>
             </v-layout>
         </v-container>
     </div>
@@ -152,12 +163,12 @@
                     .then(() => {
                         this.autoLogin();
                     }).catch((error) => {
-                        if (error.response.statusText === "Bad Request: email already in use") {
-                            this.error = "This email is already in use"
+                    if (error.response.statusText === "Bad Request: email already in use") {
+                        this.error = "This email is already in use"
 
-                        } else {
-                            this.error = error.response.statusText;
-                        }
+                    } else {
+                        this.error = error.response.statusText;
+                    }
                     this.errorFlag = true;
                 });
             },
@@ -191,7 +202,7 @@
                 this.registrationData.country = '';
             },
             onPickFile() {
-              this.$refs.fileInput.click();
+                this.$refs.fileInput.click();
             },
             onFilePicked(event) {
                 const files = event.target.files;

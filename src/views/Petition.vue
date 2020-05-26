@@ -320,6 +320,10 @@
                     });
             },
             signPetition() {
+                if (!this.$store.state.isLoggedIn) {
+                    this.$router.push({path: '/Register'});
+                    return;
+                }
                 apiPetition.addSignature(this.petition.petitionId)
                     .then(() => {
                         this.getPetition();
