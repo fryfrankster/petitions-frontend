@@ -43,7 +43,6 @@
                                         <v-card-text>
                                             <v-container>
                                                 <v-row>
-                                                    <!--                                                    <v-form @submit.prevent="editProfile">-->
                                                     <v-col cols="12">
                                                         <v-text-field
                                                                 v-model="edit.name"
@@ -96,8 +95,8 @@
 
                                                     <v-col cols="12">
                                                         <!--Uploading an image for user-->
-                                                        <v-btn @click="onPickFile('user')">Change image</v-btn>
-                                                        <v-btn color="red white--text" @click="this.imageUrl = ''">Delete image</v-btn>
+                                                        <v-btn class="ma-1" @click="onPickFile('user')">Change image</v-btn>
+                                                        <v-btn class="ma-1" color="red white--text" @click="imageUrl = ''">Delete image</v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"
@@ -150,7 +149,7 @@
                                         <v-card-title>
                                             <span class="headline">New Petition</span>
                                         </v-card-title>
-                                        <div v-if="errorFlag2" style="color: red;">
+                                        <div class="mx-8" v-if="errorFlag2" style="color: red;">
                                             {{ error2 }}
                                         </div>
                                         <v-card-text>
@@ -228,8 +227,11 @@
                                         <!--Save and close-->
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                                            <v-btn color="blue darken-1" text
+                                            <v-btn color="blue darken-1"
+                                                   text @click="dialog = false"
+                                            >Close</v-btn>
+                                            <v-btn color="blue darken-1"
+                                                   text
                                                    :disabled="this.$v.form.title.$invalid || this.$v.form.description.$invalid || this.$v.form.categoryId.$invalid || this.$v.petitionImageUrl.$invalid"
                                                    v-on:click="newPetition"
                                             >Save
@@ -479,6 +481,13 @@
                     }
                 );
             },
+            setUserPhoto(userId, image) {
+                apiUser.setPhoto(userId, image).then(() => {
+                }).catch((error) => {
+                        console.log(error);
+                    }
+                );
+            },
             onPickFile() {
                 this.$refs.fileInput.click();
             },
@@ -491,17 +500,26 @@
                 const fileReader = new FileReader();
                 fileReader.addEventListener('load', () => {
                     if (type === 'petition') {
-                        this.imageUrl = fileReader.result;
-                    } else {
                         this.petitionImageUrl = fileReader.result;
+                    } else {
+                        this.imageUrl = fileReader.result;
                     }
                 });
                 fileReader.readAsDataURL(files[0]);
                 if (type === 'petition') {
-                    this.image = files[0];
-                } else {
                     this.petitionImage = files[0];
+                } else {
+                    this.image = files[0];
                 }
+            },
+            deleteUserPhoto(userId) {
+                apiUser.deletePhoto(userId)
+                    .then(() => {
+                    })
+                    .catch((error) => {
+                        this.error3 = error.response.statusText;
+                        this.errorFlag3 = true;
+                    })
             },
             editProfile() {
                 let editRequest = {};
@@ -514,6 +532,11 @@
 
                 apiUser.editUser(editRequest, localStorage.getItem('userId'))
                     .then(() => {
+                        if (this.imageUrl === '') {
+                            this.deleteUserPhoto(localStorage.getItem('userId'))
+                        } else {
+                            this.setUserPhoto(localStorage.getItem('userId'), this.image)
+                        }
                         this.getUser();
                         this.getPetitions();
                         this.dialogEditProfile = false;

@@ -13,6 +13,7 @@
                                     <p>Start signing now</p>
                                 </v-row>
                             </div>
+
                             <div v-if="errorFlag" style="color: red;">
                                 {{ error }}
                             </div>
